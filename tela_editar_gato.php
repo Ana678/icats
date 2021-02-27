@@ -16,18 +16,28 @@ if(isset($_GET['editar'])){
   $codEditar= $_GET['editar'];
 
   if(isset($_POST['nome'])) {
-    $extensao=substr($_FILES['arquivo']['name'], -4);
-    $foto=md5(time()).$extensao;
-    $diretorio="uploads/";
-    move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
-
+   
     $nome= $_POST['nome'];
     $sexo= $_POST['sexo'];
     $descricao=$_POST['descricao'];
     $idade=$_POST['idade'];
-    $consultaUpdate = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_FOTO='$foto',GAT_DESCRICAO='$descricao',GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
+
+    if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo foi selecionado */
+
+      $consultaUpdate = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
+      
+      header("Location:lista_gatos.php");
+
+    }else{ 
+      $extensao=substr($_FILES['arquivo']['name'], -4);
+      $foto=md5(time()).$extensao;
+      $diretorio="uploads/";
+      move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+
+      $consultaUpdate2 = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_FOTO = '$foto', GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
+      header("Location:lista_gatos.php");
+    }
     
-    header("Location:lista_gatos.php");
   }
 }
 
@@ -91,7 +101,7 @@ if(isset($_GET['excluir'])){
               <label class="col-form-label">Foto do Gato:</label>
                 <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="arquivo" name="arquivo" ?>">
+                      <input type="file" class="custom-file-input" id="arquivo" name="arquivo">
                       <label class="custom-file-label" for="arquivo">Escolha a foto do gatinho</label>
                     </div>
                   </div>
