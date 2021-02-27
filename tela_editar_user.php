@@ -1,20 +1,42 @@
-<?php
-include("config.php");
+<?php 
 session_start();
+include("config.php");
 
-if(isset($_POST['nome'])) {
-  $extensao=substr($_FILES['arquivo']['name'], -4);
-  $foto=md5(time()).$extensao;
-  $diretorio="uploads/";
-  move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+$codigouser = $_SESSION['codigouser'];
+$consultaDadosUser=$MYSQLi->query("SELECT * FROM TB_USUARIOS WHERE USU_CODIGO = $codigouser");
+$resultadoDadosUser=$consultaDadosUser->fetch_assoc();
 
-  $nome = $_POST['nome'];
-  $raca = $_POST['raca'];
-  $sexo = $_POST['sexo'];
-  $descricao=$_POST['descricao'];
-  $consulta = $MYSQLi->query("INSERT INTO TB_ANIMAIS (ANI_NOME,ANI_SEXO,ANI_RACA,ANI_ONG_CODIGO,ANI_FOTO,ANI_DESCRICAO) VALUES ('$nome','$sexo','$raca',$codigoOng,'$foto','$descricao')");
-  header("Location:tela_lista_ani_ong.php");
-}
+if(isset($_GET['editar'])){
+
+    $codEditar= $_GET['editar'];
+  
+    if(isset($_POST['nome'])) {
+     
+      $nome= $_POST['nome'];
+      $email= $_POST['email'];
+      $telefone=$_POST['telefone'];
+  
+      if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo foi selecionado */
+  
+        $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
+        
+        header("Location:tela_perfil_user.php");
+  
+      }else{ 
+        $extensao=substr($_FILES['arquivo']['name'], -4);
+        $foto=md5(time()).$extensao;
+        $diretorio="uploads/";
+        move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+        
+        $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_FOTO = '$foto', USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
+        
+        header("Location:tela_perfil_user.php");
+      }
+      
+    }
+  }
+  
+
 ?>
 <?php include("design_cabecalho_user.php"); ?>
 
@@ -26,21 +48,21 @@ if(isset($_POST['nome'])) {
         <div class="card">
           <div class="card-body">
             <h4 class="header-title">Editar Perfil</h4>
-            <form action="?" method="POST" class="form-horizontal" enctype="multipart/form-data">
+            <form action="?editar=<?php echo $codigouser ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group" style="margin-top: -45px;">
-                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="https://i.pinimg.com/originals/aa/44/30/aa443099466ac6990767ecd8eff4444a.jpg">
+                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="uploads/<?php echo $resultadoDadosUser['USU_FOTO']; ?>">
                 <div class="input-group">
-                  <input type="text" id="nome" name="nome" placeholder="Bill borba gato" class="form-control">
+                  <input type="text" id="nome" name="nome" placeholder="Bill borba gato" class="form-control" value="<?php echo $resultadoDadosUser['USU_NOME']; ?>">
                 </div>
               </div>
               <div class="form-group">
                 <div class="input-group">
-                  <input type="email" id="email" name="email" placeholder="exemplo@hotmail.com" class="form-control">
+                  <input type="email" id="email" name="email" placeholder="exemplo@hotmail.com" class="form-control" value="<?php echo $resultadoDadosUser['USU_EMAIL']; ?>">
                 </div>
               </div>
               <div class="form-group">
                 <div class="input-group">
-                  <input type="number" id="telefone" name="telefone" placeholder="84998423160" class="form-control">
+                  <input type="number" id="telefone" name="telefone" placeholder="84998423160" class="form-control" value="<?php echo $resultadoDadosUser['USU_TELEFONE']; ?>">
                 </div>
               </div>
               <div class="form-group">
@@ -53,8 +75,8 @@ if(isset($_POST['nome'])) {
               </div>
 
               <div class="form-group text-center">
-              <button type="submit" class="btn btn-primary mb-3 mr-3">Editar</button>
-              <button type="button" class="btn btn-primary mb-3 ml-3">Voltar</button>
+              <button type="button" class="btn btn-primary mb-3 mr-3">Voltar</button>
+              <button type="submit" class="btn btn-primary mb-3 ml-3">Editar</button>
               </div>
 
             </form>

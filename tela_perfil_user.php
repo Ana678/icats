@@ -1,10 +1,9 @@
 <?php 
 include("config.php");
 session_start();
-$codigo=$_SESSION['codigouser'];
-$consulta=$MYSQLi->query("SELECT * FROM TB_USUARIOS WHERE USU_CODIGO=$codigo");
-$resultado=$consulta->fetch_assoc();
-$consulta2=$MYSQLi->query("SELECT * FROM tb_apadrinhamentos JOIN tb_animais ON APA_ANI_CODIGO=ANI_CODIGO JOIN tb_usuarios ON APA_USU_CODIGO=USU_CODIGO WHERE USU_CODIGO=$codigo");
+$codigouser=$_SESSION['codigouser'];
+$consultaDadosUser=$MYSQLi->query("SELECT * FROM TB_USUARIOS WHERE USU_CODIGO=$codigouser");
+$resultadoDadosUser=$consultaDadosUser->fetch_assoc();
 ?>
 
 <?php include("design_cabecalho_user.php"); ?>
@@ -14,12 +13,18 @@ $consulta2=$MYSQLi->query("SELECT * FROM tb_apadrinhamentos JOIN tb_animais ON A
             <div class="media mb-2">
                 <div class="media-body">
                     <h4 class="mb-3">Perfil do usuário</h4> 
-                    <h6>Nome: Joana de Araújo</h6>
-                    <h6>Email: joana@hotmail.com</h6>
-                    <h6>Senha: **********</h6>
-                    <h6>Celular:84 999234456</h6>
+                    <h6>Nome: <?php echo $resultadoDadosUser['USU_NOME']; ?></h6>
+                    <h6>Email: <?php echo $resultadoDadosUser['USU_EMAIL']; ?></h6>
+                    <h6>Senha: <?php $count = strlen($resultadoDadosUser['USU_SENHA']);
+                    
+                        for($i=0; $i < $count;$i++){
+                            echo '*'.'<nobr>';
+                        }
+                     ?>
+                     </h6>
+                    <h6>Celular: <?php echo $resultadoDadosUser['USU_TELEFONE']; ?></h6>
                 </div>
-                <img class="img-fluid ml-4" src="https://i.pinimg.com/originals/aa/44/30/aa443099466ac6990767ecd8eff4444a.jpg" alt="image" style="width: 150px;height:150px; border-radius: 50%;" > 
+                <img class="img-fluid ml-4" src="uploads/<?php echo $resultadoDadosUser['USU_FOTO']; ?>" alt="image" style="width: 150px;height:150px; border-radius: 50%;" > 
             </div>
             <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_user.php';" >EDITAR USUÁRIO &nbsp;<i class="ti-pencil"></i></button>
         </div>
