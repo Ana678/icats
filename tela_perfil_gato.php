@@ -60,15 +60,8 @@ include("design_cabecalho_user.php");
                                         <td>3 kg</td>
                                         <td>10 - muito bem</td>
                                         <td style="text-align:center">
-                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_gato.php?codigo=<?php echo $codigoGato; ?>';" >EDITAR ESTADO &nbsp;<i class="ti-pencil"></i></button> 
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/08/21</td>
-                                        <td>3 kg</td>
-                                        <td>10 - muito bem</td>
-                                        <td style="text-align:center">
-                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_gato.php?codigo=<?php echo $codigoGato; ?>';" >EDITAR ESTADO &nbsp;<i class="ti-pencil"></i></button> 
+                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EDITAR  &nbsp;<i class="ti-pencil"></i></button> 
+                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EXCLUIR  &nbsp;<i class="ti-trash"></i></button> 
                                         </td>
                                     </tr>
                                 <?php while($resultadoEstadoSaude = $consultaEstadoSaude->fetch_assoc()){ ?>
@@ -77,7 +70,8 @@ include("design_cabecalho_user.php");
                                         <td>3 kg</td>
                                         <td>10 - muito bem</td>
                                         <td style="text-align:center">
-                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_gato.php?codigo=<?php echo $codigoGato; ?>';" >EDITAR GATO &nbsp;<i class="ti-pencil"></i></button> 
+                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EDITAR  &nbsp;<i class="ti-pencil"></i></button> 
+                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EXCLUIR  &nbsp;<i class="ti-trash"></i></button> 
                                         </td>
                                     </tr>
                                 <?php } ?>
