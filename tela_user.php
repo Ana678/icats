@@ -1,7 +1,10 @@
 <?php  
 include('verifica_user.php');
 include('config.php');
-$consulta = $MYSQLi->query("SELECT * FROM TB_GATOS");
+
+$codigouser=$_SESSION['codigouser'];
+
+$consultaGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
 
 include("design_cabecalho_user.php"); 
 
@@ -24,15 +27,16 @@ include("design_cabecalho_user.php");
 								</tr>
 							</thead>
 							<tbody>
-									<?php while($resultado = $consulta->fetch_assoc()){ ?> 
+									<?php while($resultadoGatos = $consultaGatos->fetch_assoc()){ ?> 
 									<tr>
-										<td><img src="uploads/<?php echo $resultado['GAT_FOTO']; ?>" style="width: 45px; height:45px;border-radius:100%">
-											<?php echo $resultado['GAT_NOME']; ?></td>
+										<td><img src="uploads/<?php echo $resultadoGatos['GAT_FOTO']; ?>" style="width: 45px; height:45px;border-radius:100%">
+											<?php echo $resultadoGatos['GAT_NOME']; ?></td>
 											<td></td>
 											<td></td>
 											<td></td>
 											<td style="text-align:center">
 												<button type="button" class="btn btn-secondary" style="border-radius:40px;" data-toggle="modal"  data-target="#exampleModalCenter">Adicionar</button>
+											
 												<!--                    MODAL                       -->
 												<div class="modal fade" id="exampleModalCenter">
 													<div class="modal-dialog modal-dialog-centered" role="document">
@@ -54,9 +58,15 @@ include("design_cabecalho_user.php");
 																		<div class="form-group">
 																			<label class="col-form-label">Nome do gato:</label>
 																			<select class="custom-select" name="humor">
-																				<option selected="selected" value="1">Ximbica</option>
-																				<option value="2">Manoel</option>
-																				<option value="10">Paulino</option>
+																				<?php 
+																					$consultaNomesGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
+
+																					while($resultadoNomesGatos = $consultaNomesGatos->fetch_assoc()){ ?>
+																					
+																					<option value="<?php echo $resultadoNomesGatos['GAT_CODIGO'];?>">
+																				<?php echo $resultadoNomesGatos['GAT_NOME']; ?>
+																					</option>
+																				<?php } ?>
 																			</select>
 																		</div>
 																		<div class="form-group">
