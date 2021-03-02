@@ -6,15 +6,19 @@ $codigouser=$_SESSION['codigouser'];
 if(isset($_GET['codigo'])){
     $codigoGato = $_GET['codigo'];
 
-    $consultaGato=$MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_CODIGO = $codigoGato");
-    $resultado=$consultaGato->fetch_assoc();
-    $sexo = $resultado['GAT_SEX_CODIGO'];
-    $consultaSexo=$MYSQLi->query("SELECT SEX_SEXO FROM TB_SEXOS WHERE SEX_CODIGO = $sexo");
-    $resultadoSexo=$consultaSexo->fetch_assoc();
+    $consultaGato=$MYSQLi->query("SELECT * FROM TB_GATOS JOIN TB_SEXOS ON GAT_SEX_CODIGO = SEX_CODIGO WHERE GAT_CODIGO = $codigoGato");
+    $resultadoGato=$consultaGato->fetch_assoc();
 
-    $consultaEstadoSaude =$MYSQLi->query("SELECT * FROM TB_EST_SAUDE WHERE EST_GAT_CODIGO = $codigoGato");
+    $consultaEstadoSaude = $MYSQLi->query("SELECT *,date_format(EST_DATA,'%d.%m.%Y') AS DATA FROM TB_EST_SAUDE JOIN TB_HUMORES ON EST_HUM_CODIGO = HUM_CODIGO WHERE EST_GAT_CODIGO= $codigoGato ORDER BY EST_DATA DESC");
+
+    if(isset($_GET['excluir'])){
+        $codigoEstadoSaudeExcluir = $_GET['excluir'];
+
+        $consultaEstadoSaudeExcluir = $MYSQLi->query("DELETE FROM TB_EST_SAUDE WHERE EST_CODIGO = $codigoEstadoSaudeExcluir;");
+
+        header("Location:tela_perfil_gato.php?codigo=$codigoGato");
+    }
 }
-
 include("design_cabecalho_user.php");
 ?>
 
@@ -27,11 +31,11 @@ include("design_cabecalho_user.php");
                 <div class="media mb-2">
                     <div class="media-body">
                         <h4 class="mb-3">Perfil do gato</h4> 
-                        <h6>Nome: <?php echo $resultado['GAT_NOME']; ?></h6>
-                        <h6>Sexo: <?php echo $resultadoSexo['SEX_SEXO']; ?></h6>
-                        <h6>Idade: <?php echo $resultado['GAT_IDADE'] ?> aninhos</h6>
+                        <h6>Nome: &nbsp;<?php echo $resultadoGato['GAT_NOME']; ?></h6>
+                        <h6>Sexo: &nbsp;<?php echo $resultadoGato['SEX_SEXO']; ?></h6>
+                        <h6>Idade: &nbsp;<?php echo $resultadoGato['GAT_IDADE'] ?>&nbsp;aninhos</h6>
                     </div>
-                    <img class="img-fluid ml-4" src="uploads/<?php echo $resultado['GAT_FOTO'] ?>" alt="image" style="width: 120px;height:120px; border-radius: 50%;" >
+                    <img class="img-fluid ml-4" src="uploads/<?php echo $resultadoGato['GAT_FOTO'] ?>" alt="image" style="width: 120px;height:120px; border-radius: 50%;" >
                 </div>
             </div>
         </div>
@@ -42,7 +46,7 @@ include("design_cabecalho_user.php");
     <div class="col-12 mt-2">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title text-center" style="margin-bottom: 25px">TABELA DE ACOMPANHAMENTO DO BILL</h4>
+                <h4 class="header-title text-center" style="margin-bottom: 25px">TABELA DE ACOMPANHAMENTO DE <span style="text-transform: uppercase">&nbsp;<?php echo $resultadoGato['GAT_NOME']; ?></span</h4>
                 <div class="single-table">
                     <div class="table-responsive">
                         <table class="table table-hover progress-table">
@@ -55,23 +59,16 @@ include("design_cabecalho_user.php");
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                        <td>25/08/21</td>
-                                        <td>3 kg</td>
-                                        <td>10 - muito bem</td>
-                                        <td style="text-align:center">
-                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EDITAR  &nbsp;<i class="ti-pencil"></i></button> 
-                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EXCLUIR  &nbsp;<i class="ti-trash"></i></button> 
-                                        </td>
-                                    </tr>
                                 <?php while($resultadoEstadoSaude = $consultaEstadoSaude->fetch_assoc()){ ?>
                                     <tr>
-                                        <td>25/08/21</td>
-                                        <td>3 kg</td>
-                                        <td>10 - muito bem</td>
+                                        <td><?php echo $resultadoEstadoSaude['DATA'];?></td>
+                                        <td><?php echo $resultadoEstadoSaude['EST_PESO']; ?>&nbsp;kg</td>
+                                        <td><?php echo $resultadoEstadoSaude['HUM_HUMOR']; ?></td>
                                         <td style="text-align:center">
-                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EDITAR  &nbsp;<i class="ti-pencil"></i></button> 
-                                        <button type="button" class="btn btn-rounded btn-primary mb-3 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EXCLUIR  &nbsp;<i class="ti-trash"></i></button> 
+                                        <button type="button" class="btn btn-rounded btn-primary mb-1 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EDITAR  &nbsp;<i class="ti-pencil"></i></button> 
+                                        <form class="d-inline" action="?codigo=<?php echo $codigoGato ?>&&excluir=<?php echo $resultadoEstadoSaude['EST_CODIGO']; ?>" method="POST">
+                                            <button type="submit" class="btn btn-rounded btn-primary mb-1 ml-2 mr-2">EXCLUIR  &nbsp;<i class="ti-trash"></i></button> 
+                                        </form>
                                         </td>
                                     </tr>
                                 <?php } ?>

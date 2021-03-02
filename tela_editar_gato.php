@@ -45,7 +45,7 @@ if(isset($_GET['excluir'])){
 
   $codExcluir= $_GET['excluir'];
 
-    $consultaDrop = $MYSQLi->query("DELETE FROM TB_GATOS WHERE GAT_CODIGO=$codExcluir;");
+    $consultaDelete = $MYSQLi->query("DELETE FROM TB_GATOS WHERE GAT_CODIGO=$codExcluir;");
     
     header("Location:lista_gatos.php");
   

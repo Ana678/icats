@@ -5,8 +5,22 @@ include("config.php");
 $codigouser=$_SESSION['codigouser'];
 
 $consultaGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
+$consultaHumores = $MYSQLi->query("SELECT * FROM TB_HUMORES");
 
+if(isset($_POST['nomeGato'])){ 
+	
+	$codNome  = $_POST['nomeGato'];
+	$codHumor = $_POST['humor'];
+	$peso     = $_POST['peso'];
+	$data     = $_POST['data'];
+	
+    $consultaInsert=$MYSQLi->query("INSERT INTO TB_EST_SAUDE (EST_DATA,EST_PESO,EST_GAT_CODIGO,EST_HUM_CODIGO) VALUES ('$data',$peso,$codNome,$codHumor)");
+
+	
+	header("Location:lista_gatos.php");
+}
 include("design_cabecalho_user.php");
+
 ?>
 
 
@@ -17,7 +31,7 @@ include("design_cabecalho_user.php");
 				<div class="card card-bordered" style="border-radius:40px;">
 
 					<div class="card-body">
-						<h3><img class="card-img-top img-fluid" style="width: 50px; heigth: 50px;margin:10px;border-radius:100%" src="uploads/<?php echo $resultado['GAT_FOTO']; ?>" alt="image">
+						<h3><img class="imgcard-img-top img-fluid" style="width: 50px; height: 50px;margin:10px;border-radius:100%" src="uploads/<?php echo $resultado['GAT_FOTO']; ?>" alt="imagem de perfil do">
 						<?php echo $resultado['GAT_NOME']; ?></h3>
 						<h6><?php echo $resultado['GAT_DESCRICAO']; ?></h6><br>
 						<div class="row align-center justify-content-center">
@@ -46,24 +60,33 @@ include("design_cabecalho_user.php");
 												<form action="?" method="POST" class="form-horizontal" enctype="multipart/form-data">
 													<div class="form-group">
 														<label class="col-form-label">Nome do gato:</label>
-														<select class="custom-select" name="humor">
-															<option selected="selected" value="1">Ximbica</option>
-															<option value="2">Manoel</option>
-															<option value="10">Paulino</option>
+														<select class="custom-select" name="nomeGato">
+															<?php 
+																$consultaNomesGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
+
+																while($resultadoNomesGatos = $consultaNomesGatos->fetch_assoc()){ ?>
+																
+																<option value="<?php echo $resultadoNomesGatos['GAT_CODIGO'];?>">
+																<?php echo $resultadoNomesGatos['GAT_NOME']; ?>
+																</option>
+															<?php } ?>
 														</select>
 													</div>
 													<div class="form-group">
 														<label class="col-form-label">Humor do gato:</label>
 														<select class="custom-select" name="humor">
-															<option selected="selected" value="1">Muito triste</option>
-															<option value="2">Triste</option>
-															<option value="10">Muito feliz</option>
+															<?php while($resultadoHumores = $consultaHumores->fetch_assoc()){ ?>
+
+																<option value="<?php echo $resultadoHumores['HUM_CODIGO'];?>">
+																<?php echo $resultadoHumores['HUM_HUMOR']; ?>
+																</option>
+															<?php } ?>
 														</select>
 													</div>
 													<div class="form-group">
 														<label class="col-form-label">Peso do gato:</label>
 														<div class="input-group">
-															<input type="text" id="peso" name="peso" placeholder="3" class="form-control">&nbsp; Kg
+															<input type="number" onchange="setTwoNumberDecimal" min="0.1" max="100" step="0.1" id="peso" name="peso" placeholder="3.5" class="form-control">&nbsp; Kg
 														</div>
 													</div>
 													<div class="form-group">
@@ -72,13 +95,15 @@ include("design_cabecalho_user.php");
 															<input type="date" id="data" name="data" placeholder="Data de cadastro" class="form-control">
 														</div>
 													</div>
-												</form>						
+												
+									
 										</div>
 										<div class="modal-footer">
-											<a href="tela_user.php" style="text-decoration: none;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button></a>
-											<a href=""><button type="button" class="btn btn-primary">Cadastrar</button></a> 
+											<a href="tela_user.php" style="text-decoration: none;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button></a>
+											<button type="submit" class="btn btn-primary">Cadastrar</button>
 
 										</div>
+										</form>
 									</div>
 								</div>
 							</div>

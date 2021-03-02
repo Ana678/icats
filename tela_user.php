@@ -1,10 +1,24 @@
-<?php  
+<?php   
 include('verifica_user.php');
 include('config.php');
 
 $codigouser=$_SESSION['codigouser'];
 
 $consultaGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
+$consultaHumores = $MYSQLi->query("SELECT * FROM TB_HUMORES");
+
+if(isset($_POST['nomeGato'])){ 
+	
+	$codNome  = $_POST['nomeGato'];
+	$codHumor = $_POST['humor'];
+	$peso     = $_POST['peso'];
+	$data     = $_POST['data'];
+	
+    $consultaInsert=$MYSQLi->query("INSERT INTO TB_EST_SAUDE (EST_DATA,EST_PESO,EST_GAT_CODIGO,EST_HUM_CODIGO) VALUES ('$data',$peso,$codNome,$codHumor)");
+
+	
+	header("Location:tela_user.php");
+}
 
 include("design_cabecalho_user.php"); 
 
@@ -27,18 +41,39 @@ include("design_cabecalho_user.php");
 								</tr>
 							</thead>
 							<tbody>
-									<?php while($resultadoGatos = $consultaGatos->fetch_assoc()){ ?> 
+									<?php while($resultadoGatos = $consultaGatos->fetch_assoc()){ 
+											$codGato=$resultadoGatos['GAT_CODIGO'];
+											$consultaEstadoSaude = $MYSQLi->query("SELECT *,date_format(EST_DATA,'%d.%m.%Y') AS DATA FROM TB_EST_SAUDE JOIN TB_HUMORES ON EST_HUM_CODIGO = HUM_CODIGO WHERE EST_GAT_CODIGO= $codGato ORDER BY EST_DATA DESC LIMIT 1");
+											$resultadoEstadoSaude = $consultaEstadoSaude->fetch_assoc();
+										
+
+											$primeiroNome = explode(" ", $resultadoGatos['GAT_NOME']); 
+									?> 
 									<tr>
 										<td><img src="uploads/<?php echo $resultadoGatos['GAT_FOTO']; ?>" style="width: 45px; height:45px;border-radius:100%">
-											<?php echo $resultadoGatos['GAT_NOME']; ?></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td style="text-align:center">
-												<button type="button" class="btn btn-secondary" style="border-radius:40px;" data-toggle="modal"  data-target="#exampleModalCenter">Adicionar</button>
+										&nbsp;<?php echo current($primeiroNome); ?></td>
+
+											<?php if(isset($resultadoEstadoSaude['DATA']) && isset($resultadoEstadoSaude['EST_PESO']) && isset($resultadoEstadoSaude['HUM_HUMOR'])){ ?>
 											
-												<!--                    MODAL                       -->
+											<td><?php echo $resultadoEstadoSaude['DATA'];?></td>
+											<td><?php echo $resultadoEstadoSaude['EST_PESO']; ?></td>
+											<td><?php echo $resultadoEstadoSaude['HUM_HUMOR']; ?></td>
+
+											<?php }else{ ?>
+											
+											<td></td>
+											<td></td>
+											<td></td>
+
+											<?php } ?>
+											<td style="text-align:center">
+												<a  data-toggle="modal"  data-target="#exampleModalCenter">
+													<button type="button" class="btn btn-secondary" style="border-radius:40px;">Adicionar</button>
+												</a>
+													<!--                    MODAL                       -->
 												<div class="modal fade" id="exampleModalCenter">
+													
+
 													<div class="modal-dialog modal-dialog-centered" role="document">
 														<div class="modal-content">
 															<div class="modal-header">
@@ -57,14 +92,14 @@ include("design_cabecalho_user.php");
 																	<form action="?" method="POST" class="form-horizontal" enctype="multipart/form-data">
 																		<div class="form-group">
 																			<label class="col-form-label">Nome do gato:</label>
-																			<select class="custom-select" name="humor">
+																			<select class="custom-select" name="nomeGato">
 																				<?php 
 																					$consultaNomesGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
 
 																					while($resultadoNomesGatos = $consultaNomesGatos->fetch_assoc()){ ?>
 																					
 																					<option value="<?php echo $resultadoNomesGatos['GAT_CODIGO'];?>">
-																				<?php echo $resultadoNomesGatos['GAT_NOME']; ?>
+																					<?php echo $resultadoNomesGatos['GAT_NOME']; ?>
 																					</option>
 																				<?php } ?>
 																			</select>
@@ -72,15 +107,18 @@ include("design_cabecalho_user.php");
 																		<div class="form-group">
 																			<label class="col-form-label">Humor do gato:</label>
 																			<select class="custom-select" name="humor">
-																				<option selected="selected" value="1">Muito triste</option>
-																				<option value="2">Triste</option>
-																				<option value="10">Muito feliz</option>
+																				<?php while($resultadoHumores = $consultaHumores->fetch_assoc()){ ?>
+
+																					<option value="<?php echo $resultadoHumores['HUM_CODIGO'];?>">
+																					<?php echo $resultadoHumores['HUM_HUMOR']; ?>
+																					</option>
+																				<?php } ?>
 																			</select>
 																		</div>
 																		<div class="form-group">
 																			<label class="col-form-label">Peso do gato:</label>
 																			<div class="input-group">
-																				<input type="text" id="peso" name="peso" placeholder="3" class="form-control">&nbsp; Kg
+																				<input type="number" onchange="setTwoNumberDecimal" min="0.1" max="100" step="0.1" id="peso" name="peso" placeholder="3.5" class="form-control">&nbsp; Kg
 																			</div>
 																		</div>
 																		<div class="form-group">
@@ -89,14 +127,15 @@ include("design_cabecalho_user.php");
 																				<input type="date" id="data" name="data" placeholder="Data de cadastro" class="form-control">
 																			</div>
 																		</div>
-																	</form>
+																	
 														
 															</div>
 															<div class="modal-footer">
 																<a href="tela_user.php" style="text-decoration: none;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button></a>
-																<a href=""><button type="button" class="btn btn-primary">Cadastrar</button></a> 
+																<button type="submit" class="btn btn-primary">Cadastrar</button>
 
 															</div>
+															</form>
 														</div>
 													</div>
 												</div>

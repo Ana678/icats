@@ -70,7 +70,7 @@
                     <div class="col-md-6 col-sm-4 clearfix">
                         <ul class="notification-area pull-right">
                             <li><div class="user-profile pull-right">
-                                <h4 class="user-name dropdown-toggle" data-toggle="dropdown"><?php echo $_SESSION['username']; ?> <i class="fa fa-angle-down"></i></h4>
+                                <h4 class="user-name dropdown-toggle" data-toggle="dropdown"><?php $primeiroNome = explode(" ", $_SESSION['username']); echo current($primeiroNome); ?> <i class="fa fa-angle-down"></i></h4>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="tela_perfil_user.php">Perfil</a>
                                     <a class="dropdown-item" href="logout.php">Log Out</a>
