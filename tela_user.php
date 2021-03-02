@@ -98,7 +98,10 @@ include("design_cabecalho_user.php");
 
 																					while($resultadoNomesGatos = $consultaNomesGatos->fetch_assoc()){ ?>
 																					
-																					<option value="<?php echo $resultadoNomesGatos['GAT_CODIGO'];?>">
+																					<option value="<?php echo $resultadoNomesGatos['GAT_CODIGO'];?>"<?php 
+																						if($resultadoNomesGatos['GAT_CODIGO'] == $codGato)
+																							echo "selected";
+																						?>>
 																					<?php echo $resultadoNomesGatos['GAT_NOME']; ?>
 																					</option>
 																				<?php } ?>

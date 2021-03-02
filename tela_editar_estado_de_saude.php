@@ -2,40 +2,27 @@
 include("config.php");
 session_start();
 
-if(isset($_GET['codigo'])){
-
-  $codigoGato = $_GET['codigo'];
-  $consultaDadosGato=$MYSQLi->query("SELECT * FROM TB_EST_SAUDE WHERE EST_GAT_CODIGO = $codigoGato;");
-  $resultadoDadosGato=$consultaDadosGato->fetch_assoc();
-}
-
+$codigouser=$_SESSION['codigouser'];
 
 if(isset($_GET['editar'])){
 
-  $codEditar= $_GET['editar'];
+  $codigoEstadoSaude = $_GET['editar'];
+  $consultaDadosGato=$MYSQLi->query("SELECT * FROM TB_EST_SAUDE JOIN TB_GATOS ON EST_GAT_CODIGO = GAT_CODIGO WHERE EST_CODIGO =  $codigoEstadoSaude;");
+  $resultadoDadosGato=$consultaDadosGato->fetch_assoc();
+  $consultaHumores = $MYSQLi->query("SELECT * FROM TB_HUMORES");
+  $codGato = $resultadoDadosGato['GAT_CODIGO'];
 
-  if(isset($_POST['humor'])) {
-
-    $humor= $_POST['humor'];
-    $peso= $_POST['peso'];
-    $data=$_POST['data'];
-
-    $consultaUpdate = $MYSQLi->query("UPDATE TB_EST_SAUDE SET EST_HUM_CODIGO='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
-
-    header("Location:lista_gatos.php");
-
+  if(isset($_POST['nomeGato'])){ 
+	
+    $codNome  = $_POST['nomeGato'];
+    $codHumor = $_POST['humor'];
+    $peso     = $_POST['peso'];
+    $data     = $_POST['data'];
     
+    $consultaUpdate=$MYSQLi->query("UPDATE TB_EST_SAUDE SET EST_HUM_CODIGO='$codHumor',EST_GAT_CODIGO='$codNome',EST_PESO='$peso',EST_DATA='$data' WHERE EST_CODIGO=$codigoEstadoSaude;");
+    
+    header("Location:tela_perfil_gato.php?codigo=$codGato");
   }
-}
-
-if(isset($_GET['excluir'])){
-
-  $codExcluir= $_GET['excluir'];
-
-  $consultaDrop = $MYSQLi->query("DELETE FROM TB_EST_SAUDE WHERE EST_GAT_CODIGO = $codigoGato;");
-
-  header("Location:lista_gatos.php");
-  
 }
 
 ?>
@@ -49,39 +36,53 @@ if(isset($_GET['excluir'])){
         <div class="card">
           <div class="card-body">
             <h4 class="header-title">Editar Estado de saúde:</h4>
-            <form action="?editar=<?php echo $codigoGato ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
+          <form action="?editar=<?php echo $codigoEstadoSaude ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group">
                 <label class="col-form-label">Nome do gato:</label>
-                <label> <!--Aqui faz a consulta do nome do gato que está tendo o estado de saúde editado-->
-                  <?php 
-                  echo $resultadoDadosGato['GAT_NOME'];
-                  ?> Bill
-                </label>
+                <select class="custom-select" name="nomeGato">
+                    <?php 
+                      $consultaNomesGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
+
+                      while($resultadoNomesGatos = $consultaNomesGatos->fetch_assoc()){ ?>
+                      
+                      <option value="<?php echo $resultadoNomesGatos['GAT_CODIGO'];?>"<?php 
+                        if($resultadoNomesGatos['GAT_CODIGO'] == $resultadoDadosGato['GAT_CODIGO'])
+                          echo "selected";
+                        ?>>
+                      <?php echo $resultadoNomesGatos['GAT_NOME']; ?>
+                      </option>
+                    <?php } ?>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Humor do gato:</label>
                   <select class="custom-select" name="humor">
-                    <option selected="selected" value="1">Muito triste</option>
-                    <option value="2">Triste</option>
-                    <option value="10">Muito feliz</option>
+                    <?php while($resultadoHumores = $consultaHumores->fetch_assoc()){ ?>
+                      <option value="<?php echo $resultadoHumores['HUM_CODIGO'];?>"<?php
+                      if($resultadoDadosGato['EST_HUM_CODIGO'] == $resultadoHumores['HUM_CODIGO'])echo "selected";
+                      ?>>
+                      <?php echo $resultadoHumores['HUM_HUMOR']; ?>
+                      </option>
+                    <?php } ?>
                   </select>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Peso do gato:</label>
                   <div class="input-group">
-                    <input type="text" id="peso" name="peso" placeholder="3" class="form-control">&nbsp; Kg
+                    <input value="<?php echo $resultadoDadosGato['EST_PESO']; ?>" type="text" id="peso" name="peso" placeholder="3" class="form-control">&nbsp; Kg
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Data de cadastro:</label>
                   <div class="input-group">
-                    <input type="date" id="data" name="data" placeholder="Data de cadastro" class="form-control">
+                    <input value="<?php echo $resultadoDadosGato['EST_DATA']; ?>" type="date" id="data" name="data" placeholder="Data de cadastro" class="form-control">
                   </div>
                 </div>
-              </form>
-
-
-             
+                <div class="form-group text-center">
+                  <button type="button" class="btn btn-primary mb-3 mr-3" onclick="location.href='tela_perfil_gato.php?codigo=<?php echo $resultadoDadosGato['GAT_CODIGO'];?>'">Voltar</button>
+                  <button type="submit" class="btn btn-primary mb-3 ml-3">Editar</button>
+                </div>
+              </form>          
             </div>
           </div>
         </div>

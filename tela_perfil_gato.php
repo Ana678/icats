@@ -65,7 +65,7 @@ include("design_cabecalho_user.php");
                                         <td><?php echo $resultadoEstadoSaude['EST_PESO']; ?>&nbsp;kg</td>
                                         <td><?php echo $resultadoEstadoSaude['HUM_HUMOR']; ?></td>
                                         <td style="text-align:center">
-                                        <button type="button" class="btn btn-rounded btn-primary mb-1 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?codigo=<?php echo $codigoGato; ?>';" >EDITAR  &nbsp;<i class="ti-pencil"></i></button> 
+                                        <button type="button" class="btn btn-rounded btn-primary mb-1 ml-2 mr-2" onclick="location.href='tela_editar_estado_de_saude.php?editar=<?php echo $resultadoEstadoSaude['EST_CODIGO']; ?>';" >EDITAR  &nbsp;<i class="ti-pencil"></i></button> 
                                         <form class="d-inline" action="?codigo=<?php echo $codigoGato ?>&&excluir=<?php echo $resultadoEstadoSaude['EST_CODIGO']; ?>" method="POST">
                                             <button type="submit" class="btn btn-rounded btn-primary mb-1 ml-2 mr-2">EXCLUIR  &nbsp;<i class="ti-trash"></i></button> 
                                         </form>
