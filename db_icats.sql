@@ -74,8 +74,10 @@ INSERT INTO `tb_humores` (`HUM_CODIGO`, `HUM_HUMOR`) VALUES
 (2, 'Triste'),
 (3, 'Estressado'),
 (4, 'Apavorado'),
-(5, 'Animado'),
-(6, 'Alerta');
+(5, 'Alerta'),
+(6, 'Animado'),
+(7, 'Brincalhão'),
+(8, 'Feliz');
 
 -- --------------------------------------------------------
 --
@@ -87,9 +89,18 @@ CREATE TABLE `tb_est_saude` (
   `EST_GAT_CODIGO` int(11) NOT NULL,
   `EST_HUM_CODIGO` int(11) NOT NULL,
   `EST_DATA` date NOT NULL,
-  `EST_PESO` int(11) NOT NULL,
+  `EST_PESO` float NOT NULL,
 
   CONSTRAINT FK_GATEST FOREIGN KEY (EST_GAT_CODIGO) REFERENCES TB_GATOS(GAT_CODIGO),
   CONSTRAINT FK_HUMEST FOREIGN KEY (EST_HUM_CODIGO) REFERENCES TB_HUMORES(HUM_CODIGO)
+
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `tb_recover` (
+
+  `REC_CODIGO` int(20) NOT NULL auto_increment PRIMARY KEY,
+  `REC_EMAIL` varchar(200) NOT NULL,
+  `REC_HASH` varchar(200) NOT NULL,
+  `REC_STATUS` int(20) NOT NULL DEFAULT 0
 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -1,27 +1,6 @@
 <?php 
 session_start();
 include("config.php");
-if(isset($_POST['nome'])) {
-    $extensao=substr($_FILES['arquivo']['name'], -4);
-    $foto=md5(time()).$extensao;
-    $diretorio="uploads/";
-    move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
-
-    $email = $_POST['username'];
-    $senha = $_POST['password'];
-    $email = $_POST['email'];
-    $nome = $_POST['nome'];
-    $telefone = $_POST['telefone'];
-    $logradouro = $_POST['logradouro'];
-    $estado = $_POST['estado'];
-    $cidade = $_POST['cidade'];
-    $consulta = $MYSQLi->query("INSERT INTO TB_USUARIOS
-        (USU_EMAIL,USU_SENHA,USU_NOMEUSER,USU_NOME,USU_TELEFONE,USU_LOGRADOURO,USU_EST_CODIGO,USU_FOTO,USU_CID_CODIGO)
-        VALUES ('$email','$senha','$email','$nome','$telefone' ,'$logradouro',$estado,'$foto',$cidade)");
-    header("Location: login.php");
-}
-$consulta3 = $MYSQLi->query("SELECT * FROM TB_ESTADOS ORDER BY EST_NOME ASC");
-$consulta2=$MYSQLi->query("SELECT * FROM TB_CIDADES ORDER BY CID_CIDADE ASC");
 ?>
 
 <html class="no-js" lang="en">
@@ -58,7 +37,7 @@ $consulta2=$MYSQLi->query("SELECT * FROM TB_CIDADES ORDER BY CID_CIDADE ASC");
     <div class="login-area login-bg" >
         <div class="container">
             <div class="login-box ptb--100">
-                <form method="POST" action="tela_rec_senha_nova.php" enctype="multipart/form-data">
+                <form method="POST" action="funcoesRecuperarSenha.php" enctype="multipart/form-data">
                     <div class="login-form-head" style="background-color: white;">
                         <a href="tela_user.php"><img src="assets/images/icon/img7.jpg" alt="logo" style="width: 50%;"></a><br>
                     </div>
