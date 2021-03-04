@@ -2,38 +2,41 @@
 session_start();
 include("../config.php");
 
-if(isset($_POST['email'])) {
-     
+if(isset($_POST['email'])) { 
 
+    /*  Esse código basicamente pega o email inserido no formulario da página 'tela_rec_senha.php' 
+        e verifica se ele existe.                */
+    
     $email = $_POST['email'];
-
-    $sql = $MYSQLi->prepare("SELECT * FROM TB_USUARIOS WHERE USU_EMAIL = ?");
-    $sql->bind_param("s", $email);
+    $sql = $MYSQLi->prepare("SELECT * FROM TB_USUARIOS WHERE USU_EMAIL = '$email'");
     $sql->execute();
     $get = $sql->get_result();
     $total = $get->num_rows;
 
-    if($total > 0){
+    if($total > 0){ /* Se o email existir, chama a função add_dados_recover() */
         $dados = $get->fetch_assoc();
         add_dados_recover($MYSQLi, $email);
     }else{
-
+        echo "<br><div class='alert alert-danger text-center'>Insira Dados Coerentes</div>";
     }
 }
 
 function add_dados_recover($MYSQLi, $email){
+    /*  Esse código insere os dados na tabela TB_RECOVER. 
+        $hash: é um código para essa recuperação de senha, 
+        que será inserido na url, através de um link enviado no email   */
+
     $hash = md5(rand());
-    $sql = $MYSQLi->prepare("INSERT INTO TB_RECOVER (REC_EMAIL, REC_HASH) VALUES (?, ?)");
-    $sql->bind_param("ss", $email, $hash);
+    $sql = $MYSQLi->prepare("INSERT INTO TB_RECOVER (REC_EMAIL, REC_HASH) VALUES ('$email', '$hash')");
     $sql->execute();
 
-    if($sql->affected_rows > 0){
+    if($sql->affected_rows > 0){ /* se a inserção dos dados em TB_RECOVER tiver occorrido com sucesso, chama enviar_email() */
         enviar_email($MYSQLi, $email, $hash);
     }
 }
 
 function enviar_email($MYSQLi, $email, $hash){
-
+    /* esse código serve para enviar o email, por meio da funcao mail()*/
     $destinatario = $email;
 
     $subject = "Solicitação para Recuperar Senha";
@@ -54,7 +57,7 @@ function enviar_email($MYSQLi, $email, $hash){
 
     $message .="</head></html>";
 
-    if(mail($destinatario, $subject, $message, $headers)){
+    if(mail($destinatario, $subject, $message, $headers)){ /* se a funcao for bem sucedida */
         echo "<br><div class='alert alert-success text-center'>Os dados foram enviados para o seu email. Acesse-o para recuperar.</div>";
     }else{
         echo "<br><div class='alert alert-danger text-center'>Erro ao enviar</div>";

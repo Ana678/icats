@@ -20,11 +20,13 @@ if(isset($_POST['nome'])) {
     header("Location:lista_gatos.php");  
 
   }else{
-
+    
+    /* --- codigos para adicionar foto ao banco e à pasta de uploads ---- */
     $extensao=substr($_FILES['arquivo']['name'], -4); 
     $foto=md5(time()).$extensao;
     $diretorio="../uploads/";
     move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+    /* ----------------------------------------------------------------- */
 
     $consultaInsert = $MYSQLi->query("INSERT INTO TB_GATOS (GAT_NOME,GAT_SEX_CODIGO,GAT_FOTO,GAT_DESCRICAO,GAT_USU_CODIGO,GAT_IDADE) VALUES ('$nome','$sexo','$foto','$descricao','$codigouser',$idade)");
     

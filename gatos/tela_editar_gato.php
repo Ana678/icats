@@ -29,10 +29,12 @@ if(isset($_GET['codigo'])){
         header("Location:lista_gatos.php");
 
       }else{ 
-        $extensao=substr($_FILES['arquivo']['name'], -4);
+        /* --- codigos para adicionar foto ao banco e à pasta de uploads ---- */
+        $extensao=substr($_FILES['arquivo']['name'], -4); 
         $foto=md5(time()).$extensao;
         $diretorio="../uploads/";
         move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+        /* ----------------------------------------------------------------- */
 
         $consultaUpdate2 = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_FOTO = '$foto', GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
         header("Location:lista_gatos.php");
@@ -67,7 +69,7 @@ if(isset($_GET['codigo'])){
 
             <form action="?codigo=<?php echo $codigoGato ?>&editar=<?php echo $codigoGato ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group" style="margin-top: -45px;">
-                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="uploads/<?php echo $resultadoDadosGato['GAT_FOTO'] ?>">
+                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="/icats/uploads/<?php echo $resultadoDadosGato['GAT_FOTO'] ?>">
                 <div class="input-group">
                   <input type="text" id="nome" name="nome" value="<?php echo $resultadoDadosGato['GAT_NOME']; ?>" placeholder="Bill borba gato" class="form-control">
                 </div>
@@ -75,7 +77,7 @@ if(isset($_GET['codigo'])){
               <div class="form-group">
                 <label class="col-form-label">Idade do Gato:</label>
                 <div class="input-group">
-                                  <input type="number" id="idade" name="idade" value="<?php echo $resultadoDadosGato['GAT_IDADE']; ?>" placeholder="2" class="form-control">
+                  <input type="number" id="idade" name="idade" value="<?php echo $resultadoDadosGato['GAT_IDADE']; ?>" placeholder="2" class="form-control">
                 </div>
               </div>
               <div class="form-group">

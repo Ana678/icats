@@ -8,35 +8,29 @@ if(isset($_GET['hash'])){
     $consultaRecover = $MYSQLi->query("SELECT * FROM TB_RECOVER WHERE REC_HASH = '$hash' AND REC_STATUS = 0");
     $resultadoConsultaRecover = $consultaRecover->fetch_assoc();
 
-    if(isset($resultadoConsultaRecover['REC_HASH'])){
-
-        if(isset($_POST['senha'])){
+    if(isset($resultadoConsultaRecover['REC_HASH'])){ /* valida se a hash ainda existe no banco de dados */
+ 
+        if(isset($_POST['senha'])){ /* pega os dados da nova senha */
         $nsenha = $_POST['senha']; 
         $confsenha = $_POST['confirmarsenha']; 
         
-        if($nsenha == $confsenha){
+            if($nsenha == $confsenha){ /* a senha e a confirmação devem ser iguais */
 
-            $emailUser = $resultadoConsultaRecover['REC_EMAIL'];
+                $emailUser = $resultadoConsultaRecover['REC_EMAIL'];
+                $updateSenha = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_SENHA = '$nsenha' WHERE USU_EMAIL = '$emailUser'");
+                $deleteRecover = $MYSQLi->query("DELETE FROM TB_RECOVER WHERE REC_EMAIL = '$emailUser'");
 
-            $updateSenha = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_SENHA = '$nsenha' WHERE USU_EMAIL = '$emailUser'");
-            $deleteRecover = $MYSQLi->query("DELETE FROM TB_RECOVER WHERE REC_EMAIL = '$emailUser'");
-
-            echo "<br><div class='alert alert-success'>Senha alterada com sucesso.</div>";
-            
-            header("Location:login.php");  
-        }else{
-
-            echo "<br><div class='alert alert-danger text-center'>A senha e a confirmação estão diferentes! </div>";
-
+                /* Logo após a senha ter sido recuperada, é excluida da tabela 'TB_RECOVER' a linha correspondente a esse email */
+                header("Location:login.php");  
+            }else{
+                echo "<br><div class='alert alert-danger text-center'>A senha e a confirmação estão diferentes! </div>";
+            }     
         }
-            
-        }
-    }else{
+    }else{ /* caso a hash nao exista no banco de dados*/
         echo "<br><div class='alert alert-danger text-center'>Solicitação recusada, tente novamente.</div>";
     }
-}else{
-        echo "<br><div class='alert alert-danger text-center'>Solicitação recusada, tente novamente.</div>";
-    }
+}
+
 ?>
 
 <html class="no-js" lang="en">

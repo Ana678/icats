@@ -4,6 +4,8 @@ session_start();
 
 $codigouser=$_SESSION['codigouser'];
 
+/* -------------- CÓDIGOS PARA EDITAR UM ESTADO DE SAUDE -------------- */
+
 if(isset($_GET['editar'])){
 
   $codigoEstadoSaude = $_GET['editar'];
@@ -24,6 +26,7 @@ if(isset($_GET['editar'])){
     header("Location:tela_perfil_gato.php?codigo=$codGato");
   }
 }
+/* ----------------------------------------------------------------- */
 
 ?>
 <?php include("../design_cabecalho_user.php"); ?>
@@ -69,7 +72,7 @@ if(isset($_GET['editar'])){
                 <div class="form-group">
                   <label class="col-form-label">Peso do gato:</label>
                   <div class="input-group">
-                    <input value="<?php echo $resultadoDadosGato['EST_PESO']; ?>" type="text" id="peso" name="peso" placeholder="3" class="form-control">&nbsp; Kg
+                    <input value="<?php echo $resultadoDadosGato['EST_PESO']; ?>" type="number" step="0.1" id="peso" name="peso" placeholder="3" class="form-control">&nbsp; Kg
                   </div>
                 </div>
                 <div class="form-group">

@@ -4,21 +4,9 @@ include('config.php');
 
 $codigouser=$_SESSION['codigouser'];
 
+/* -------------- CONSULTA PARA PEGAR TODOS OS GATOS DO USUARIO ------------------- */
 $consultaGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
-$consultaHumores = $MYSQLi->query("SELECT * FROM TB_HUMORES");
-
-if(isset($_POST['nomeGato'])){ 
-	
-	$codNome  = $_POST['nomeGato'];
-	$codHumor = $_POST['humor'];
-	$peso     = $_POST['peso'];
-	$data     = $_POST['data'];
-	
-    $consultaInsert=$MYSQLi->query("INSERT INTO TB_EST_SAUDE (EST_DATA,EST_PESO,EST_GAT_CODIGO,EST_HUM_CODIGO) VALUES ('$data',$peso,$codNome,$codHumor)");
-
-	
-	header("Location:tela_principal.php");
-}
+/* ----------------------------------------------------------------- */
 
 include("design_cabecalho_user.php"); 
 
@@ -42,12 +30,14 @@ include("design_cabecalho_user.php");
 							</thead>
 							<tbody>
 									<?php while($resultadoGatos = $consultaGatos->fetch_assoc()){ 
+											/* --- Seleciona em 'TB_EST_SAUDE' o ultimo registro do estado de saúde do gato --- */
 											$codGato=$resultadoGatos['GAT_CODIGO'];
 											$consultaEstadoSaude = $MYSQLi->query("SELECT *,date_format(EST_DATA,'%d.%m.%Y') AS DATA FROM TB_EST_SAUDE JOIN TB_HUMORES ON EST_HUM_CODIGO = HUM_CODIGO WHERE EST_GAT_CODIGO= $codGato ORDER BY EST_DATA DESC LIMIT 1");
 											$resultadoEstadoSaude = $consultaEstadoSaude->fetch_assoc();
-										
 
-											$primeiroNome = explode(" ", $resultadoGatos['GAT_NOME']); 
+											$primeiroNome = explode(" ", $resultadoGatos['GAT_NOME']); /* pega apenas o primeiro nome */
+
+											/* -------------------------------------------------------------------------------- */
 									?> 
 									<tr>
 										<td><img src="uploads/<?php echo $resultadoGatos['GAT_FOTO']; ?>" style="width: 45px; height:45px;border-radius:100%">
@@ -71,11 +61,8 @@ include("design_cabecalho_user.php");
 													<button type="button" class="btn btn-secondary" style="border-radius:40px;">Adicionar</button>
 												</a>
 											</td>
-
 										</tr>
 									<?php } ?>
-
-									
 								</tbody>
 							</table>
 						</div>

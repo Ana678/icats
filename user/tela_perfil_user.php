@@ -1,9 +1,14 @@
 <?php 
 include("../config.php");
 session_start();
+
+/* -------------- CONSULTA NO BANCO OS DADOS USUÁRIO -------------- */
+
 $codigouser=$_SESSION['codigouser'];
 $consultaDadosUser=$MYSQLi->query("SELECT * FROM TB_USUARIOS WHERE USU_CODIGO=$codigouser");
 $resultadoDadosUser=$consultaDadosUser->fetch_assoc();
+
+/* ---------------------------------------------------------------- */
 ?>
 
 <?php include("../design_cabecalho_user.php"); ?>
@@ -15,10 +20,10 @@ $resultadoDadosUser=$consultaDadosUser->fetch_assoc();
                     <h4 class="mb-3">Perfil do usuário</h4> 
                     <h6>Nome: <?php echo $resultadoDadosUser['USU_NOME']; ?></h6>
                     <h6>Email: <?php echo $resultadoDadosUser['USU_EMAIL']; ?></h6>
-                    <h6>Senha: <?php $count = strlen($resultadoDadosUser['USU_SENHA']);
+                    <h6>Senha: <?php $count = strlen($resultadoDadosUser['USU_SENHA']); /* conta os caracteres da senha */
                     
                         for($i=0; $i < $count;$i++){
-                            echo '*'.'<nobr>';
+                            echo '*'.'<nobr>'; /* substitui por um asterisco */
                         }
                      ?>
                      </h6>

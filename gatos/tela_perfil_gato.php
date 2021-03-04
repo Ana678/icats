@@ -2,6 +2,8 @@
 include("../config.php");
 session_start();
 $codigouser=$_SESSION['codigouser'];
+    
+/* --- codigos para pegar dados do usuário e do estado de saude pelo código(gato) da url ---- */    
 
 if(isset($_GET['codigo'])){
     $codigoGato = $_GET['codigo'];
@@ -10,15 +12,8 @@ if(isset($_GET['codigo'])){
     $resultadoGato=$consultaGato->fetch_assoc();
 
     $consultaEstadoSaude = $MYSQLi->query("SELECT *,date_format(EST_DATA,'%d.%m.%Y') AS DATA FROM TB_EST_SAUDE JOIN TB_HUMORES ON EST_HUM_CODIGO = HUM_CODIGO WHERE EST_GAT_CODIGO= $codigoGato ORDER BY EST_DATA DESC");
-
-    if(isset($_GET['excluir'])){
-        $codigoEstadoSaudeExcluir = $_GET['excluir'];
-
-        $consultaEstadoSaudeExcluir = $MYSQLi->query("DELETE FROM TB_EST_SAUDE WHERE EST_CODIGO = $codigoEstadoSaudeExcluir;");
-
-        header("Location:tela_perfil_gato.php?codigo=$codigoGato");
-    }
 }
+/* ----------------------------------------------------------------------------------------- */
 include("../design_cabecalho_user.php");
 ?>
 

@@ -36,7 +36,7 @@ session_start();
     <div class="login-area login-bg" >
         <div class="container">
             <div class="login-box ptb--100">
-                <form method="POST" action="loginUser.php">
+                <form method="POST" action="loginVerifica.php">
                     <div class="login-form-head" style="background-color: white;">
                         <img src="../assets/images/icon/img7.jpg" alt="logo" style="width: 70%;"><br>
                     </div>

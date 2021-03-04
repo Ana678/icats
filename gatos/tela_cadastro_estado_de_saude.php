@@ -93,7 +93,7 @@ if(isset($_GET['addByListar'])){
                 <div class="form-group">
                   <label class="col-form-label">Peso do gato:</label>
                   <div class="input-group">
-                    <input type="text" id="peso" name="peso" placeholder="3" class="form-control">&nbsp; Kg
+                    <input type="number" step="0.1" id="peso" name="peso" placeholder="3" class="form-control">&nbsp; Kg
                   </div>
                 </div>
                 <div class="form-group">

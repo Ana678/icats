@@ -2,25 +2,33 @@
 session_start();
 include("../config.php");
 
-if(isset($_POST['nome'])) {
-    $extensao=substr($_FILES['arquivo']['name'], -4);
-    $foto=md5(time()).$extensao;
-    $diretorio="../uploads/";
-    move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+/* -------------- CÓDIGOS PARA ADICIONAR UM NOVO USUÁRIO -------------- */
 
+if(isset($_POST['nome'])) {
 
     $email = $_POST['email'];
     $senha = $_POST['password'];
     $nome = $_POST['nome'];
     $telefone = $_POST['telefone'];
 
-    $consulta = $MYSQLi->query("INSERT INTO TB_USUARIOS
-        (USU_EMAIL,USU_SENHA,USU_NOME,USU_TELEFONE,USU_FOTO)
-        VALUES ('$email','$senha','$nome','$telefone' ,'$foto')");
-        
-    header("Location: login.php");
-}
+    if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo para a foto foi selecionado */
+        $foto = 'user_padrao.jpg'; /* se não, insere uma foto padrao no banco */
+        $consultaInsert = $MYSQLi->query("INSERT INTO TB_USUARIOS (USU_EMAIL,USU_SENHA,USU_NOME,USU_TELEFONE,USU_FOTO) VALUES ('$email','$senha','$nome','$telefone' ,'$foto')");
 
+        header("Location: login.php"); 
+    }else{    
+        $extensao=substr($_FILES['arquivo']['name'], -4);
+        $foto=md5(time()).$extensao;
+        $diretorio="../uploads/";
+        move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+
+        $consultaInsert = $MYSQLi->query("INSERT INTO TB_USUARIOS (USU_EMAIL,USU_SENHA,USU_NOME,USU_TELEFONE,USU_FOTO) VALUES ('$email','$senha','$nome','$telefone' ,'$foto')");
+        
+        header("Location: login.php");  
+    }
+    
+}
+/* -------------------------------------------------------------------- */
 ?>
 
 <html class="no-js" lang="en">

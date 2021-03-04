@@ -37,12 +37,6 @@
     <!-- others plugins -->
     <script src="/icats/assets/js/plugins.js"></script>
     <script src="/icats/assets/js/scripts.js"></script>
-    
-    <script> 
-        function setTwoNumberDecimal(event) {
-            this.value = parseFloat(this.value).toFixed(2);
-        }
-    </script>
 </body>
 
 </html>

@@ -6,36 +6,38 @@ $codigouser = $_SESSION['codigouser'];
 $consultaDadosUser=$MYSQLi->query("SELECT * FROM TB_USUARIOS WHERE USU_CODIGO = $codigouser");
 $resultadoDadosUser=$consultaDadosUser->fetch_assoc();
 
+/* -------------- CÓDIGOS PARA EDITAR DADOS DO USUARIO -------------- */
+
 if(isset($_GET['editar'])){
 
-    $codEditar= $_GET['editar'];
+  $codEditar= $_GET['editar'];
   
-    if(isset($_POST['nome'])) {
+  if(isset($_POST['nome'])) {
      
-      $nome= $_POST['nome'];
-      $email= $_POST['email'];
-      $telefone=$_POST['telefone'];
+    $nome= $_POST['nome'];
+    $email= $_POST['email'];
+    $telefone=$_POST['telefone'];
+
+    if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo foi selecionado, se não, não altera o campo USU_FOTO */
   
-      if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo foi selecionado */
-  
-        $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
-        
-        header("Location:tela_perfil_user.php");
-  
-      }else{ 
-        $extensao=substr($_FILES['arquivo']['name'], -4);
-        $foto=md5(time()).$extensao;
-        $diretorio="../uploads/";
-        move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
-        
-        $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_FOTO = '$foto', USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
-        
-        header("Location:tela_perfil_user.php");
-      }
+      $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
       
-    }
-  }
+      header("Location:tela_perfil_user.php");
   
+    }else{ 
+      $extensao=substr($_FILES['arquivo']['name'], -4);
+      $foto=md5(time()).$extensao;
+      $diretorio="../uploads/";
+      move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+      
+      $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_FOTO = '$foto', USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
+      
+      header("Location:tela_perfil_user.php");
+    }
+      
+  }
+}
+/* ------------------------------------------------------------------ */  
 
 ?>
 <?php include("../design_cabecalho_user.php"); ?>
