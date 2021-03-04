@@ -5,11 +5,13 @@ session_start();
 $codigouser=$_SESSION['codigouser'];
 $consultaHumores = $MYSQLi->query("SELECT * FROM TB_HUMORES");
 
-if(isset($_GET['addByUser'])){
+/* -------------- SE A REQUISIÇAO DE ADICIONAR ESTADO DE SAUDE VIER DA TELA PRINCIPAL -------------- */
 
-    $codGato = $_GET['addByUser'];
-    $voltar = '../tela_principal.php';
-    $codForm = '?addByUser='.$codGato;
+if(isset($_GET['addByPrincipal'])){
+
+    $codGato = $_GET['addByPrincipal'];
+    $voltar = '../tela_principal.php'; /* codigo usado no botão de voltar */
+    $codForm = '?addByPrincipal='.$codGato; /* codigo usado na action do form */
 
     if(isset($_POST['nomeGato'])){ 
 	
@@ -25,11 +27,14 @@ if(isset($_GET['addByUser'])){
     
     }
 }
+/* ------------------------------------------------------------------------------------------------ */
+/* -------- SE A REQUISIÇAO DE ADICIONAR ESTADO DE SAUDE VIER DA TELA DE LISTAGEM DE GATOS -------- */
+
 if(isset($_GET['addByListar'])){
 
     $codGato = $_GET['addByListar'];
-    $voltar = 'lista_gatos.php';
-    $codForm = '?addByListar='.$codGato;
+    $voltar = 'lista_gatos.php'; /* codigo usado no botão de voltar */
+    $codForm = '?addByListar='.$codGato; /* codigo usado na action do form */
 
     if(isset($_POST['nomeGato'])){ 
 	
@@ -44,6 +49,7 @@ if(isset($_GET['addByListar'])){
 	header("Location:lista_gatos.php");
     }
 }
+/* ------------------------------------------------------------------------------------------------ */
 
 ?>
 <?php include("../design_cabecalho_user.php"); ?>
@@ -96,10 +102,9 @@ if(isset($_GET['addByListar'])){
                     <input type="date" id="data" name="data" placeholder="Data de cadastro" class="form-control">
                   </div>
                 </div>
-                <div class="form-group text-center">
-                        
-                  <button type="button" class="btn btn-primary mb-3 mr-3" onclick="location.href='<?php echo $voltar ?>'">Voltar</button>
-                  <button type="submit" class="btn btn-primary mb-3 ml-3">Adicionar</button>
+                <div class="form-group text-center mt-4">
+                  <button type="button" class="btn btn-rounded btn-primary mb-3 ml-3 mr-3 pr-5 pl-5" onclick="location.href='<?php echo $voltar ?>'">Voltar</button>
+                  <button type="submit" class="btn btn-rounded btn-primary mb-3 ml-3 mr-3 pr-5 pl-5">Adicionar</button>
                 </div>
               </form>          
             </div>

@@ -7,48 +7,50 @@ if(isset($_GET['codigo'])){
   $codigoGato = $_GET['codigo'];
   $consultaDadosGato=$MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_CODIGO = $codigoGato");
   $resultadoDadosGato=$consultaDadosGato->fetch_assoc();
-}
 
-$consultaSexo = $MYSQLi->query("SELECT * FROM TB_SEXOS");
 
-if(isset($_GET['editar'])){
+  $consultaSexo = $MYSQLi->query("SELECT * FROM TB_SEXOS");
 
-  $codEditar= $_GET['editar'];
+  if(isset($_GET['editar'])){
 
-  if(isset($_POST['nome'])) {
-   
-    $nome= $_POST['nome'];
-    $sexo= $_POST['sexo'];
-    $descricao=$_POST['descricao'];
-    $idade=$_POST['idade'];
+    $codEditar= $_GET['editar'];
 
-    if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo foi selecionado */
+    if(isset($_POST['nome'])) {
+    
+      $nome= $_POST['nome'];
+      $sexo= $_POST['sexo'];
+      $descricao=$_POST['descricao'];
+      $idade=$_POST['idade'];
 
-      $consultaUpdate = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
+      if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo para a foi selecionado */
+
+        $consultaUpdate = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
+        
+        header("Location:lista_gatos.php");
+
+      }else{ 
+        $extensao=substr($_FILES['arquivo']['name'], -4);
+        $foto=md5(time()).$extensao;
+        $diretorio="../uploads/";
+        move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+
+        $consultaUpdate2 = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_FOTO = '$foto', GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
+        header("Location:lista_gatos.php");
+      }
       
-      header("Location:lista_gatos.php");
-
-    }else{ 
-      $extensao=substr($_FILES['arquivo']['name'], -4);
-      $foto=md5(time()).$extensao;
-      $diretorio="../uploads/";
-      move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
-
-      $consultaUpdate2 = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_FOTO = '$foto', GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
-      header("Location:lista_gatos.php");
     }
+  }
+
+  if(isset($_GET['excluir'])){
+
+    $codExcluir= $_GET['excluir'];
+      
+    $consultaDeleteEstadosSaude=$MYSQLi->query("DELETE FROM TB_EST_SAUDE WHERE EST_GAT_CODIGO=$codExcluir;");
+    $consultaDeleteGato=$MYSQLi->query("DELETE FROM TB_GATOS WHERE GAT_CODIGO=$codExcluir;");
+      
+    header("Location:lista_gatos.php");
     
   }
-}
-
-if(isset($_GET['excluir'])){
-
-  $codExcluir= $_GET['excluir'];
-
-    $consultaDelete = $MYSQLi->query("DELETE FROM TB_GATOS WHERE GAT_CODIGO=$codExcluir;");
-    
-    header("Location:lista_gatos.php");
-  
 }
 
 ?>
@@ -63,7 +65,7 @@ if(isset($_GET['excluir'])){
           <div class="card-body">
             <h4 class="header-title">Editar gato</h4>
 
-            <form action="?editar=<?php echo $codigoGato ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
+            <form action="?codigo=<?php echo $codigoGato ?>&editar=<?php echo $codigoGato ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group" style="margin-top: -45px;">
                 <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="uploads/<?php echo $resultadoDadosGato['GAT_FOTO'] ?>">
                 <div class="input-group">
@@ -106,15 +108,15 @@ if(isset($_GET['excluir'])){
                     </div>
                   </div>
               </div>  
-              <div class="form-group text-center">
-                <button type="button" class="btn btn-primary mb-3 mr-3">Voltar</button>
-                <button type="submit" class="btn btn-primary mb-3 ml-3">Editar</button>
+              <div class="form-group text-center mt-4">
+                <button type="button" class="btn btn-rounded btn-primary mb-3 ml-3 mr-3 pr-5 pl-5" onclick="location.href='lista_gatos.php'">Voltar</button>
+                <button type="submit" class="btn btn-rounded btn-primary mb-3 ml-3 mr-3 pr-5 pl-5">Editar</button>
               </div>
 
             </form>
-            <form action="?excluir=<?php echo $codigoGato ?>" method="POST">
+            <form action="?codigo=<?php echo $codigoGato ?>&excluir=<?php echo $codigoGato ?>" method="POST">
                   <div class="form-group text-right">          
-                  <button type="submit" style="background-color:transparent;border:none"><h6 class="col-form-label">excluir gato</h6></button>
+                    <button type="submit" style="background-color:transparent;border:none"><h6 class="col-form-label">excluir gato</h6></button>
                   </div>
             </form>
           </div>

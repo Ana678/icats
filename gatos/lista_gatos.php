@@ -2,23 +2,12 @@
 include('../login/verifica_user.php');
 include("../config.php");
 
+/* -------------- CONSULTA NO BANCO OS DADOS DOS GATOS DO USUÁRIO -------------- */
 $codigouser=$_SESSION['codigouser'];
-
 $consultaGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
-$consultaHumores = $MYSQLi->query("SELECT * FROM TB_HUMORES");
 
-if(isset($_POST['nomeGato'])){ 
-	
-	$codNome  = $_POST['nomeGato'];
-	$codHumor = $_POST['humor'];
-	$peso     = $_POST['peso'];
-	$data     = $_POST['data'];
-	
-    $consultaInsert=$MYSQLi->query("INSERT INTO TB_EST_SAUDE (EST_DATA,EST_PESO,EST_GAT_CODIGO,EST_HUM_CODIGO) VALUES ('$data',$peso,$codNome,$codHumor)");
+/* ----------------------------------------------------------------------------- */
 
-	
-	header("Location:lista_gatos.php");
-}
 include("../design_cabecalho_user.php");
 
 ?>

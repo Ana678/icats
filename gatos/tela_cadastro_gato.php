@@ -6,19 +6,35 @@ $codigouser=$_SESSION['codigouser'];
 
 $consultaSexo = $MYSQLi->query("SELECT * FROM TB_SEXOS");
 
-if(isset($_POST['nome'])) {
-  $extensao=substr($_FILES['arquivo']['name'], -4);
-  $foto=md5(time()).$extensao;
-  $diretorio="../uploads/";
-  move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+/* -------------- CÓDIGOS PARA ADICIONAR UM NOVO GATO -------------- */
 
-  $nome = $_POST['nome'];
-  $sexo = $_POST['sexo'];
+if(isset($_POST['nome'])) {
+  $nome= $_POST['nome'];
+  $sexo= $_POST['sexo'];
   $descricao=$_POST['descricao'];
   $idade=$_POST['idade'];
-  $consulta = $MYSQLi->query("INSERT INTO TB_GATOS (GAT_NOME,GAT_SEX_CODIGO,GAT_FOTO,GAT_DESCRICAO,GAT_USU_CODIGO,GAT_IDADE) VALUES ('$nome','$sexo','$foto','$descricao','$codigouser',$idade)");
-  header("Location:lista_gatos.php");
+
+  if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo para a foto foi selecionado */
+    $foto = 'gato_padrao.jpg'; /* insere uma foto padrao no banco */
+    $consultaInsert = $MYSQLi->query("INSERT INTO TB_GATOS (GAT_NOME,GAT_SEX_CODIGO,GAT_FOTO,GAT_DESCRICAO,GAT_USU_CODIGO,GAT_IDADE) VALUES ('$nome','$sexo','$foto','$descricao','$codigouser',$idade)");
+    header("Location:lista_gatos.php");  
+
+  }else{
+
+    $extensao=substr($_FILES['arquivo']['name'], -4); 
+    $foto=md5(time()).$extensao;
+    $diretorio="../uploads/";
+    move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+
+    $consultaInsert = $MYSQLi->query("INSERT INTO TB_GATOS (GAT_NOME,GAT_SEX_CODIGO,GAT_FOTO,GAT_DESCRICAO,GAT_USU_CODIGO,GAT_IDADE) VALUES ('$nome','$sexo','$foto','$descricao','$codigouser',$idade)");
+    
+    header("Location:lista_gatos.php");
+  }
+  
+  
 }
+/* ------------------------------------------------------------------ */
+
 ?>
 <?php include("../design_cabecalho_user.php"); ?>
 
@@ -47,11 +63,13 @@ if(isset($_POST['nome'])) {
                 <label class="col-form-label">Sexo do gato:</label>
                 
                 <select class="custom-select" name="sexo">
-                  <?php while($resultado = $consultaSexo->fetch_assoc()) { ?>
-                    <option value="<?php echo $resultado['SEX_CODIGO']; ?>">
-                      <?php echo $resultado['SEX_SEXO']; ?>
+                <!-- codigos apra listagem dos sexos de TB_SEXOS -->
+                  <?php while($resultadoSexos = $consultaSexo->fetch_assoc()) { ?>
+                    <option value="<?php echo $resultadoSexos['SEX_CODIGO']; ?>">
+                      <?php echo $resultadoSexos['SEX_SEXO']; ?>
                     </option>
                   <?php } ?>
+                <!-- ------------------------------- -->
                 </select>
 
               </div>
@@ -70,8 +88,8 @@ if(isset($_POST['nome'])) {
                     </div>
                   </div>
               </div>
-              <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">Adicionar</button>
+              <div class="form-group text-center mt-4">
+                <button type="submit" class="btn btn-rounded btn-primary mb-3 ml-3 mr-3 pr-5 pl-5">Adicionar</button>
               </div>
             </form>
           </div>

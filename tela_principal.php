@@ -67,7 +67,7 @@ include("design_cabecalho_user.php");
 
 											<?php } ?>
 											<td style="text-align:center">
-												<a  href="gatos/tela_cadastro_estado_de_saude.php?addByUser=<?php echo $codGato ?>">
+												<a  href="gatos/tela_cadastro_estado_de_saude.php?addByPrincipal=<?php echo $codGato ?>">
 													<button type="button" class="btn btn-secondary" style="border-radius:40px;">Adicionar</button>
 												</a>
 											</td>

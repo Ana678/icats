@@ -73,10 +73,9 @@ if(isset($_GET['editar'])){
                     </div>
                   </div>
               </div>
-
-              <div class="form-group text-center">
-              <button type="button" class="btn btn-primary mb-3 mr-3" onclick="location.href='tela_perfil_user.php';" >Voltar</button>
-              <button type="submit" class="btn btn-primary mb-3 ml-3">Editar</button>
+              <div class="form-group text-center mt-4">
+                <button type="button" class="btn btn-rounded btn-primary mb-3 ml-3 mr-3 pr-5 pl-5" onclick="location.href='tela_perfil_user.php';">Voltar</button>
+                <button type="submit" class="btn btn-rounded btn-primary mb-3 ml-3 mr-3 pr-5 pl-5">Editar</button>
               </div>
 
             </form>
