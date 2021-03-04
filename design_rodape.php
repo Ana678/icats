@@ -44,6 +44,16 @@
         }
     </script>
 
+    <!-- <script>
+        $("#btnmodal").on('click', function(){
+            $.post('addEstado.php', function(retorno){
+                $("#exampleModalCenter").modal({ backdrop: 'static' });
+                $("#conteudo").html(retorno);
+            });
+        });
+
+    </script> -->
+
 </body>
 
 </html>

@@ -67,82 +67,9 @@ include("design_cabecalho_user.php");
 
 											<?php } ?>
 											<td style="text-align:center">
-												<a  data-toggle="modal"  data-target="#exampleModalCenter">
+												<a  href="addEstado.php?addByUser=<?php echo $codGato ?>">
 													<button type="button" class="btn btn-secondary" style="border-radius:40px;">Adicionar</button>
 												</a>
-													<!--                    MODAL                       -->
-												<div class="modal fade" id="exampleModalCenter">
-													
-
-													<div class="modal-dialog modal-dialog-centered" role="document">
-														<div class="modal-content">
-															<div class="modal-header">
-																<h5 class="modal-title" >Adicionar estado de saúde</h5>
-																<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																	<span aria-hidden="true">&times;</span>
-																</button>
-															</div>
-															<div class="modal-body text-left">
-																<p style="text-align:left">
-																	Você escolheu cuidar esse animal e será agora responsável por cuidar dele em caso de necessidades, por isso adicione e acompanhe o seu estado de saúde.
-																</p>
-																<br>
-																<h4 class="header-title text-left">Cadastro de estado de saúde:</h4>
-																	<!--botei esse formulario pra poder servir de exemplo aninha, mas pode fazer do jeito que vc achar melhor-->
-																	<form action="?" method="POST" class="form-horizontal" enctype="multipart/form-data">
-																		<div class="form-group">
-																			<label class="col-form-label">Nome do gato:</label>
-																			<select class="custom-select" name="nomeGato">
-																				<?php 
-																					$consultaNomesGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
-
-																					while($resultadoNomesGatos = $consultaNomesGatos->fetch_assoc()){ ?>
-																					
-																					<option value="<?php echo $resultadoNomesGatos['GAT_CODIGO'];?>"<?php 
-																						if($resultadoNomesGatos['GAT_CODIGO'] == $codGato)
-																							echo "selected";
-																						?>>
-																					<?php echo $resultadoNomesGatos['GAT_NOME']; ?>
-																					</option>
-																				<?php } ?>
-																			</select>
-																		</div>
-																		<div class="form-group">
-																			<label class="col-form-label">Humor do gato:</label>
-																			<select class="custom-select" name="humor">
-																				<?php while($resultadoHumores = $consultaHumores->fetch_assoc()){ ?>
-
-																					<option value="<?php echo $resultadoHumores['HUM_CODIGO'];?>">
-																					<?php echo $resultadoHumores['HUM_HUMOR']; ?>
-																					</option>
-																				<?php } ?>
-																			</select>
-																		</div>
-																		<div class="form-group">
-																			<label class="col-form-label">Peso do gato:</label>
-																			<div class="input-group">
-																				<input type="number" onchange="setTwoNumberDecimal" min="0.1" max="100" step="0.1" id="peso" name="peso" placeholder="3.5" class="form-control">&nbsp; Kg
-																			</div>
-																		</div>
-																		<div class="form-group">
-																			<label class="col-form-label">Data de cadastro:</label>
-																			<div class="input-group">
-																				<input type="date" id="data" name="data" placeholder="Data de cadastro" class="form-control">
-																			</div>
-																		</div>
-																	
-														
-															</div>
-															<div class="modal-footer">
-																<a href="tela_user.php" style="text-decoration: none;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button></a>
-																<button type="submit" class="btn btn-primary">Cadastrar</button>
-
-															</div>
-															</form>
-														</div>
-													</div>
-												</div>
-												<!--            FIM 		DO        MODAL                       -->
 											</td>
 
 										</tr>

@@ -1,6 +1,5 @@
 <?php 
-session_start();
-include("config.php");
+include('funcoesRecuperarSenha.php');
 ?>
 
 <html class="no-js" lang="en">
@@ -37,7 +36,7 @@ include("config.php");
     <div class="login-area login-bg" >
         <div class="container">
             <div class="login-box ptb--100">
-                <form method="POST" action="funcoesRecuperarSenha.php" enctype="multipart/form-data">
+                <form method="POST" action="?" enctype="multipart/form-data">
                     <div class="login-form-head" style="background-color: white;">
                         <a href="tela_user.php"><img src="assets/images/icon/img7.jpg" alt="logo" style="width: 50%;"></a><br>
                     </div>

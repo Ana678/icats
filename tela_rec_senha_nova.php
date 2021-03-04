@@ -1,27 +1,42 @@
 <?php 
-session_start();
-include("config.php");
-if(isset($_POST['nome'])) {
-    $extensao=substr($_FILES['arquivo']['name'], -4);
-    $foto=md5(time()).$extensao;
-    $diretorio="uploads/";
-    move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+include('funcoesRecuperarSenha.php');
 
-    $email = $_POST['username'];
-    $senha = $_POST['password'];
-    $email = $_POST['email'];
-    $nome = $_POST['nome'];
-    $telefone = $_POST['telefone'];
-    $logradouro = $_POST['logradouro'];
-    $estado = $_POST['estado'];
-    $cidade = $_POST['cidade'];
-    $consulta = $MYSQLi->query("INSERT INTO TB_USUARIOS
-        (USU_EMAIL,USU_SENHA,USU_NOMEUSER,USU_NOME,USU_TELEFONE,USU_LOGRADOURO,USU_EST_CODIGO,USU_FOTO,USU_CID_CODIGO)
-        VALUES ('$email','$senha','$email','$nome','$telefone' ,'$logradouro',$estado,'$foto',$cidade)");
-    header("Location: login.php");
-}
-$consulta3 = $MYSQLi->query("SELECT * FROM TB_ESTADOS ORDER BY EST_NOME ASC");
-$consulta2=$MYSQLi->query("SELECT * FROM TB_CIDADES ORDER BY CID_CIDADE ASC");
+if(isset($_GET['hash'])){
+
+    $hash = $_GET['hash'];
+
+    $consultaRecover = $MYSQLi->query("SELECT * FROM TB_RECOVER WHERE REC_HASH = '$hash' AND REC_STATUS = 0");
+    $resultadoConsultaRecover = $consultaRecover->fetch_assoc();
+
+    if(isset($resultadoConsultaRecover['REC_HASH'])){
+
+        if(isset($_POST['senha'])){
+        $nsenha = $_POST['senha']; 
+        $confsenha = $_POST['confirmarsenha']; 
+        
+        if($nsenha == $confsenha){
+
+            $emailUser = $resultadoConsultaRecover['REC_EMAIL'];
+
+            $updateSenha = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_SENHA = '$nsenha' WHERE USU_EMAIL = '$emailUser'");
+            $deleteRecover = $MYSQLi->query("DELETE FROM TB_RECOVER WHERE REC_EMAIL = '$emailUser'");
+
+            echo "<br><div class='alert alert-success'>Senha alterada com sucesso.</div>";
+            
+            header("Location:login.php");  
+        }else{
+
+            echo "<br><div class='alert alert-danger text-center'>A senha e a confirmação estão diferentes! </div>";
+
+        }
+            
+        }
+    }else{
+        echo "<br><div class='alert alert-danger text-center'>Solicitação recusada, tente novamente.</div>";
+    }
+}else{
+        echo "<br><div class='alert alert-danger text-center'>Solicitação recusada, tente novamente.</div>";
+    }
 ?>
 
 <html class="no-js" lang="en">
@@ -58,7 +73,7 @@ $consulta2=$MYSQLi->query("SELECT * FROM TB_CIDADES ORDER BY CID_CIDADE ASC");
     <div class="login-area login-bg" >
         <div class="container">
             <div class="login-box ptb--100">
-                <form method="POST" action="tela_user.php" enctype="multipart/form-data">
+                <form method="POST" action="?hash=<?php echo $hash ?>" enctype="multipart/form-data">
                     <div class="login-form-head" style="background-color: white;">
                         <a href="tela_user.php"><img src="assets/images/icon/img7.jpg" alt="logo" style="width: 50%;"></a><br>
                     </div>
@@ -70,7 +85,7 @@ $consulta2=$MYSQLi->query("SELECT * FROM TB_CIDADES ORDER BY CID_CIDADE ASC");
                         </div>
                         <div class="form-gp">
                             <label for="exampleInputEmail1">Confirmar Nova Senha</label>
-                            <input type="password" id="exampleInputEmail1" name="senha">
+                            <input type="password" id="exampleInputEmail1" name="confirmarsenha">
                             <i class="ti-lock"></i>
                         </div>
                         <div class="submit-btn-area">
