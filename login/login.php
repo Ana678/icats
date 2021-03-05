@@ -53,10 +53,10 @@ session_start();
                         </div>
                         <div class="row mb-4 rmber-area">
                                 <?php
-                                if(isset($_SESSION['nao_autenticado'])){
+                                if(isset($_SESSION['nao_autenticado'])){ /* se os dados não forem encontrados no bdd */
                                     ?>
                                     <div class="alert alert-danger" role="alert">
-                                        ERRO:USUÁRIO OU SENHA INVÁLIDOS
+                                        ERRO: USUÁRIO OU SENHA INVÁLIDOS
                                     </div>
                                 <?php  } unset($_SESSION['nao_autenticado']); ?>
                             

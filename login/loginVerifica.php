@@ -7,8 +7,10 @@
 		exit();
 	}else{
 		
+		/* -------------- CÓDIGOS PARA VALIDAR O LOGIN -------------- */
 		$email = mysqli_real_escape_string($MYSQLi,$_POST['email']);
-		$senha =mysqli_real_escape_string($MYSQLi,$_POST['senha']);
+		$senha = mysqli_real_escape_string($MYSQLi,$_POST['senha']);
+
 		$query = "SELECT USU_CODIGO,USU_NOME FROM TB_USUARIOS WHERE USU_EMAIL='$email' AND USU_SENHA='$senha'";
 		
 		$result = mysqli_query($MYSQLi,$query);	
@@ -23,11 +25,13 @@
 			header("location:../tela_principal.php");
 			exit();
 			
-		}else{
+		}else{ /* retorna mensagem para a tela de login */
 			$_SESSION['nao_autenticado']=true;
 			header("location:login.php");
 			exit();
 		}		
+
+		/* ---------------------------------------------------------- */
 	}
 
 
