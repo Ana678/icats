@@ -67,7 +67,7 @@ if(isset($_POST['nome'])) {
             <div class="login-box ptb--100">
                 <form method="POST" action="?" enctype="multipart/form-data">
                     <div class="login-form-head" style="background-color: white;">
-                        <a href="../tela_principal.php"><img src="../assets/images/icon/img7.jpg" alt="logo" style="width: 50%;"></a><br>
+                        <img src="../assets/images/icon/img7.jpg" alt="logo" style="width: 50%;">
                     </div>
                     <div class="login-form-body">
                         <div class="form-gp">

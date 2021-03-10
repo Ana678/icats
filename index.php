@@ -38,8 +38,8 @@
                         <a href="tela_principal.php"><img src="assets/images/icon/img7.jpg" alt="logo" ></a><br>
                          <div class="submit-btn-area">
                            
-                            <button  type="button" type="submit" style="background-color: purple;color: white;" onclick="location.href='login/login.php';" >LOGIN USER <i class="ti-arrow-right"></i></button><br><br>
-                            <button type="button" style="background-color: purple;color: white;" onclick="location.href='tela_sobre_nos_apresentacao.php'" >SOBRE NÓS<i class="ti-arrow-right"></i></button><br><br>
+                            <button  type="button" type="submit" style="background-color: purple;color: white;" onclick="location.href='/login/login.php';" >LOGIN USER <i class="ti-arrow-right"></i></button><br><br>
+                            <button type="button" style="background-color: purple;color: white;" onclick="location.href='/tela_sobre_nos_apresentacao.php'" >SOBRE NÓS<i class="ti-arrow-right"></i></button><br><br>
                          </div>
                     </div>          
                 </form>
