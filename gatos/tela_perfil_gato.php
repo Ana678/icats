@@ -30,7 +30,7 @@ include("../design_cabecalho_user.php");
                         <h6>Sexo: &nbsp;<?php echo $resultadoGato['SEX_SEXO']; ?></h6>
                         <h6>Idade: &nbsp;<?php echo $resultadoGato['GAT_IDADE'] ?>&nbsp;aninhos</h6>
                     </div>
-                    <img class="img-fluid ml-4" src="/uploads/<?php echo $resultadoGato['GAT_FOTO'] ?>" alt="image" style="width: 120px;height:120px; border-radius: 50%;" >
+                    <img class="img-fluid ml-4" src="../uploads/<?php echo $resultadoGato['GAT_FOTO'] ?>" alt="image" style="width: 120px;height:120px; border-radius: 50%;" >
                 </div>
             </div>
         </div>

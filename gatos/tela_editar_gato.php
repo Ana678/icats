@@ -69,7 +69,7 @@ if(isset($_GET['codigo'])){
 
             <form action="?codigo=<?php echo $codigoGato ?>&editar=<?php echo $codigoGato ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group" style="margin-top: -45px;">
-                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="/uploads/<?php echo $resultadoDadosGato['GAT_FOTO'] ?>">
+                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="../uploads/<?php echo $resultadoDadosGato['GAT_FOTO'] ?>">
                 <div class="input-group">
                   <input type="text" id="nome" name="nome" value="<?php echo $resultadoDadosGato['GAT_NOME']; ?>" placeholder="Bill borba gato" class="form-control">
                 </div>

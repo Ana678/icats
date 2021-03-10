@@ -35,7 +35,7 @@
         <!-- sidebar menu area start -->
         <div class="sidebar-menu">
             <div class="sidebar-header" style="background-color: white;">
-                <a href="tela_principal.php"><img src="/assets/images/icon/img7.jpg" alt="logo" style="width: 80%;"></a><br>
+                <a href="/tela_principal.php"><img src="/assets/images/icon/img7.jpg" alt="logo" style="width: 80%;"></a><br>
             </div>
             <div class="main-menu">
                 <div class="menu-inner">
