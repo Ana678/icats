@@ -14,6 +14,11 @@ if(isset($_GET['codigo'])){
     $consultaEstadoSaude = $MYSQLi->query("SELECT *,date_format(EST_DATA,'%d.%m.%Y') AS DATA FROM TB_EST_SAUDE JOIN TB_HUMORES ON EST_HUM_CODIGO = HUM_CODIGO WHERE EST_GAT_CODIGO= $codigoGato ORDER BY EST_DATA DESC");
 }
 /* ----------------------------------------------------------------------------------------- */
+if(isset($_GET['excluir'])){
+    $codigoExcluirEstado = $_GET['excluir'];
+
+    $consultaDeleteEstadosSaude=$MYSQLi->query("DELETE FROM TB_EST_SAUDE WHERE EST_GAT_CODIGO=$codigoExcluirEstado;");
+}
 include("../design_cabecalho_user.php");
 ?>
 
