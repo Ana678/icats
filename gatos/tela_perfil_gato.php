@@ -17,7 +17,7 @@ if(isset($_GET['codigo'])){
 if(isset($_GET['excluir'])){
     $codigoExcluirEstado = $_GET['excluir'];
 
-    $consultaDeleteEstadosSaude=$MYSQLi->query("DELETE FROM TB_EST_SAUDE WHERE EST_GAT_CODIGO=$codigoExcluirEstado;");
+    $consultaDeleteEstadosSaude=$MYSQLi->query("DELETE FROM TB_EST_SAUDE WHERE EST_CODIGO=$codigoExcluirEstado;");
 }
 include("../design_cabecalho_user.php");
 ?>
