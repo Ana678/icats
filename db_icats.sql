@@ -1,3 +1,8 @@
+--
+-- Se quiser executar o projeto no computador, configure o config.php para isto
+-- E é só importar esse código no phpmyadmin
+--
+
 CREATE DATABASE IF NOT EXISTS DB_ICATS;
 USE DB_ICATS;
 
