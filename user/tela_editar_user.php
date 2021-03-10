@@ -52,7 +52,7 @@ if(isset($_GET['editar'])){
             <h4 class="header-title">Editar Perfil</h4>
             <form action="?editar=<?php echo $codigouser ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group" style="margin-top: -45px;">
-                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="/icats/uploads/<?php echo $resultadoDadosUser['USU_FOTO']; ?>">
+                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="/uploads/<?php echo $resultadoDadosUser['USU_FOTO']; ?>">
                 <div class="input-group">
                   <input type="text" id="nome" name="nome" placeholder="Bill borba gato" class="form-control" value="<?php echo $resultadoDadosUser['USU_NOME']; ?>">
                 </div>
