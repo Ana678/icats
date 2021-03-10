@@ -42,8 +42,8 @@
                     <nav>
                         <ul class="metismenu" id="menu">
                             <li><a href="tela_principal.php"><i class="ti-home"></i> <span>Home</span></a></li>
-                            <li><a href="gatos/lista_gatos.php"><i class="ti-menu-alt"></i> <span>Lista de gatos</span></a></li>
-                            <li><a href="gatos/tela_cadastro_gato.php"><i class="ti-github"></i> <span>Cadastrar gato</span></a></li>
+                            <li><a href="/gatos/lista_gatos.php"><i class="ti-menu-alt"></i> <span>Lista de gatos</span></a></li>
+                            <li><a href="/gatos/tela_cadastro_gato.php"><i class="ti-github"></i> <span>Cadastrar gato</span></a></li>
                             <li><a href="tela_sobre_nos.php"><i class="ti-help-alt"></i> <span>Sobre nós</span></a></li>
                             
                         </ul>
