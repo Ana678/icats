@@ -9,31 +9,36 @@ $consultaSexo = $MYSQLi->query("SELECT * FROM TB_SEXOS");
 /* -------------- CÓDIGOS PARA ADICIONAR UM NOVO GATO -------------- */
 
 if(isset($_POST['nome'])) {
-  $nome= $_POST['nome'];
-  $sexo= $_POST['sexo'];
-  $descricao=$_POST['descricao'];
-  $idade=$_POST['idade'];
 
-  if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo para a foto foi selecionado */
-    $foto = 'gato_padrao.jpg'; /* insere uma foto padrao no banco */
-    $consultaInsert = $MYSQLi->query("INSERT INTO TB_GATOS (GAT_NOME,GAT_SEX_CODIGO,GAT_FOTO,GAT_DESCRICAO,GAT_USU_CODIGO,GAT_IDADE) VALUES ('$nome','$sexo','$foto','$descricao','$codigouser',$idade)");
-    header("Location:lista_gatos.php");  
+  if($_POST['nome'] != "" && $_POST['sexo'] != "" && $_POST['idade'] != ""){
+
+    $nome= $_POST['nome'];
+    $sexo= $_POST['sexo'];
+    $descricao=$_POST['descricao'];
+    $idade=$_POST['idade'];
+
+    if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo para a foto foi selecionado */
+      $foto = 'gato_padrao.jpg'; /* insere uma foto padrao no banco */
+      $consultaInsert = $MYSQLi->query("INSERT INTO TB_GATOS (GAT_NOME,GAT_SEX_CODIGO,GAT_FOTO,GAT_DESCRICAO,GAT_USU_CODIGO,GAT_IDADE) VALUES ('$nome','$sexo','$foto','$descricao','$codigouser',$idade)");
+      header("Location:lista_gatos.php");  
+
+    }else{
+      
+      /* --- codigos para adicionar foto ao banco e à pasta de uploads ---- */
+      $extensao=substr($_FILES['arquivo']['name'], -4); 
+      $foto=md5(time()).$extensao;
+      $diretorio="../uploads/";
+      move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+      /* ----------------------------------------------------------------- */
+
+      $consultaInsert = $MYSQLi->query("INSERT INTO TB_GATOS (GAT_NOME,GAT_SEX_CODIGO,GAT_FOTO,GAT_DESCRICAO,GAT_USU_CODIGO,GAT_IDADE) VALUES ('$nome','$sexo','$foto','$descricao','$codigouser',$idade)");
+      
+      header("Location:lista_gatos.php");
+    }
 
   }else{
-    
-    /* --- codigos para adicionar foto ao banco e à pasta de uploads ---- */
-    $extensao=substr($_FILES['arquivo']['name'], -4); 
-    $foto=md5(time()).$extensao;
-    $diretorio="../uploads/";
-    move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
-    /* ----------------------------------------------------------------- */
-
-    $consultaInsert = $MYSQLi->query("INSERT INTO TB_GATOS (GAT_NOME,GAT_SEX_CODIGO,GAT_FOTO,GAT_DESCRICAO,GAT_USU_CODIGO,GAT_IDADE) VALUES ('$nome','$sexo','$foto','$descricao','$codigouser',$idade)");
-    
-    header("Location:lista_gatos.php");
+    echo "<script> alert('Preencha Todos os Campos Obrigatórios'); </script>";
   }
-  
-  
 }
 /* ------------------------------------------------------------------ */
 
@@ -47,7 +52,7 @@ if(isset($_POST['nome'])) {
       <div class="col-12 mt-5">
         <div class="card">
           <div class="card-body">
-            <h4 class="header-title">Cadastro de gato</h4>
+            <h4 class="header-title">Cadastro de gato<spam style="color: #7e74ff; font-size:15px;float:right"><b> * Campos Opcionais </b> </spam></h4>
             <form action="?" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group">
                 <label class="col-form-label">Nome do Gato:</label>
@@ -76,13 +81,13 @@ if(isset($_POST['nome'])) {
 
               </div>
               <div class="form-group">
-                <label class="col-form-label">Descrição Fofinha do Gato:</label>
+                <label class="col-form-label">Descrição Fofinha do Gato: <spam style="color: #7e74ff; font-size:22px;margin-left:5px;"><b> * </b></spam></label>
                   <div class="input-group">
                     <input type="text" id="descricao" name="descricao" placeholder="Ximbica é um gato muito fofinho, carinhoso, sempre me entende. Eu amo ele <3" class="form-control">
                   </div>
               </div>
               <div class="form-group">
-                <label class="col-form-label">Foto do Gato:</label>
+                <label class="col-form-label">Foto do Gato:<spam style="color: #7e74ff; font-size:22px;margin-left:5px;"><b> * </b></spam></label>
                   <div class="input-group">
                     <div class="custom-file">
                       <input type="file" class="custom-file-input" id="arquivo" name="arquivo">

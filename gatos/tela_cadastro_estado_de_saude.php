@@ -14,17 +14,21 @@ if(isset($_GET['addByPrincipal'])){
     $codForm = '?addByPrincipal='.$codGato; /* codigo usado na action do form */
 
     if(isset($_POST['nomeGato'])){ 
-	
-	$codNome  = $_POST['nomeGato'];
-	$codHumor = $_POST['humor'];
-	$peso     = $_POST['peso'];
-	$data     = $_POST['data'];
-	
-    $consultaInsert=$MYSQLi->query("INSERT INTO TB_EST_SAUDE (EST_DATA,EST_PESO,EST_GAT_CODIGO,EST_HUM_CODIGO) VALUES ('$data',$peso,$codNome,$codHumor)");
+      
+      if($_POST['nomeGato'] != "" && $_POST['humor'] != "" && $_POST['peso'] != "" && $_POST['data'] != ""){
+        
+        $codNome  = $_POST['nomeGato'];
+        $codHumor = $_POST['humor'];
+        $peso     = $_POST['peso'];
+        $data     = $_POST['data'];
+        
+          $consultaInsert=$MYSQLi->query("INSERT INTO TB_EST_SAUDE (EST_DATA,EST_PESO,EST_GAT_CODIGO,EST_HUM_CODIGO) VALUES ('$data',$peso,$codNome,$codHumor)");
 
-	
-	header("Location:../tela_principal.php");
-    
+        
+        header("Location:../tela_principal.php");
+      }else{
+        echo "<script> alert('Preencha Todos os Campos Obrigatórios'); </script>";
+      }
     }
 }
 /* ------------------------------------------------------------------------------------------------ */
@@ -37,17 +41,21 @@ if(isset($_GET['addByListar'])){
     $codForm = '?addByListar='.$codGato; /* codigo usado na action do form */
 
     if(isset($_POST['nomeGato'])){ 
-	
-	$codNome  = $_POST['nomeGato'];
-	$codHumor = $_POST['humor'];
-	$peso     = $_POST['peso'];
-	$data     = $_POST['data'];
-	
-    $consultaInsert=$MYSQLi->query("INSERT INTO TB_EST_SAUDE (EST_DATA,EST_PESO,EST_GAT_CODIGO,EST_HUM_CODIGO) VALUES ('$data',$peso,$codNome,$codHumor)");
+      
+      if($_POST['nomeGato'] != "" && $_POST['humor'] != "" && $_POST['peso'] != "" && $_POST['data'] != ""){
+          
+        $codNome  = $_POST['nomeGato'];
+        $codHumor = $_POST['humor'];
+        $peso     = $_POST['peso'];
+        $data     = $_POST['data'];
+      
+        $consultaInsert=$MYSQLi->query("INSERT INTO TB_EST_SAUDE (EST_DATA,EST_PESO,EST_GAT_CODIGO,EST_HUM_CODIGO) VALUES ('$data',$peso,$codNome,$codHumor)");
 
-	
-	header("Location:lista_gatos.php");
+	      header("Location:lista_gatos.php");
+    }else{
+      echo "<script> alert('Preencha Todos os Campos Obrigatórios'); </script>";
     }
+  }
 }
 /* ------------------------------------------------------------------------------------------------ */
 
@@ -61,7 +69,7 @@ if(isset($_GET['addByListar'])){
       <div class="col-12 mt-5">
         <div class="card">
           <div class="card-body">
-            <h4 class="header-title">Adicionar Estado de saúde:</h4>
+            <h4 class="header-title">Adicionar Estado de saúde: <spam style="color: #7e74ff; font-size:14px;float:right">Todos os Campos são Obrigatórios</spam></h4>
           <form action="<?php echo $codForm ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group">
                 <label class="col-form-label">Nome do gato:</label>

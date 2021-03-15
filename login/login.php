@@ -1,5 +1,16 @@
 <?php 
+//include('verifica_user.php');
 session_start();
+/*---- Código para verificar se tem algum dado nos cookies, 
+para o caso de o usuario ter selecionado a opcao de permanecer logado -----*/
+if (isset($_COOKIE['codSessao'])){
+		
+    $_SESSION['codigouser']= $_COOKIE['codSessao'];
+    $_SESSION['username']= $_COOKIE['namSessao'];
+    
+    header("Location: /icats/tela_principal.php");
+}
+/*--------------------------------------------------------------------------*/
 ?>
 
 <html class="no-js" lang="en">
@@ -40,7 +51,7 @@ session_start();
                     <div class="login-form-head" style="background-color: white;">
                         <img src="../assets/images/icon/img7.jpg" alt="logo" style="width: 70%;"><br>
                     </div>
-                    <div class="login-form-body">
+                    <div class="login-form-body pt-0">
                         <div class="form-gp">
                             <label for="exampleInputEmail1">Email address</label>
                             <input type="email" id="exampleInputEmail1" name="email">
@@ -61,12 +72,15 @@ session_start();
                                 <?php  } unset($_SESSION['nao_autenticado']); ?>
                             
                         </div>
-
+                        <div class="form-check mb-2">
+                            <input name="checkbox" type="checkbox" class="form-check-input" id="exampleCheck1" style="border-color: #6C757D">
+                            <label style="color: #6C757D">Permanecer Logado</label>
+                        </div>
                         <div class="submit-btn-area">
                            <button type="submit" style="background-color: purple;color: white;" >Entrar <i class="ti-arrow-right"></i></button><br><br>
                            <p class="text-muted"><a href="tela_rec_senha.php" style="color:#6c757d; font-family:Lato; font-size:15px">Esqueceu a senha?</a></p>
                        </div>
-                       <div class="form-footer text-center mt-5">
+                       <div class="form-footer text-center mt-3">
                         <p class="text-muted">Não tem conta? <a href="tela_cadastro_user.php">CADASTRE-SE</a></p>
                     </div>
                 </div>

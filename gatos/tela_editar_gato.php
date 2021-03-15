@@ -16,30 +16,34 @@ if(isset($_GET['codigo'])){
     $codEditar= $_GET['editar'];
 
     if(isset($_POST['nome'])) {
-    
-      $nome= $_POST['nome'];
-      $sexo= $_POST['sexo'];
-      $descricao=$_POST['descricao'];
-      $idade=$_POST['idade'];
-
-      if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo para a foi selecionado */
-
-        $consultaUpdate = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
-        
-        header("Location:lista_gatos.php");
-
-      }else{ 
-        /* --- codigos para adicionar foto ao banco e à pasta de uploads ---- */
-        $extensao=substr($_FILES['arquivo']['name'], -4); 
-        $foto=md5(time()).$extensao;
-        $diretorio="../uploads/";
-        move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
-        /* ----------------------------------------------------------------- */
-
-        $consultaUpdate2 = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_FOTO = '$foto', GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
-        header("Location:lista_gatos.php");
-      }
       
+      if($_POST['nome'] != "" && $_POST['sexo'] != "" && $_POST['idade'] != ""){
+
+        $nome= $_POST['nome'];
+        $sexo= $_POST['sexo'];
+        $descricao=$_POST['descricao'];
+        $idade=$_POST['idade'];
+
+        if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo para a foi selecionado */
+
+          $consultaUpdate = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
+          
+          header("Location:lista_gatos.php");
+
+        }else{ 
+          /* --- codigos para adicionar foto ao banco e à pasta de uploads ---- */
+          $extensao=substr($_FILES['arquivo']['name'], -4); 
+          $foto=md5(time()).$extensao;
+          $diretorio="../uploads/";
+          move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+          /* ----------------------------------------------------------------- */
+
+          $consultaUpdate2 = $MYSQLi->query("UPDATE TB_GATOS SET GAT_NOME='$nome',GAT_SEX_CODIGO='$sexo',GAT_DESCRICAO='$descricao',GAT_FOTO = '$foto', GAT_IDADE='$idade' WHERE GAT_CODIGO=$codEditar;");
+          header("Location:lista_gatos.php");
+        }
+      }else{
+        echo "<script> alert('Preencha Todos os Campos Obrigatórios'); </script>";
+      }
     }
   }
 
@@ -65,7 +69,7 @@ if(isset($_GET['codigo'])){
       <div class="col-12 mt-5">
         <div class="card">
           <div class="card-body">
-            <h4 class="header-title">Editar gato</h4>
+            <h4 class="header-title">Editar gato<spam style="color: #7e74ff; font-size:15px;float:right"><b> * Campos Opcionais </b> </spam></h4>
 
             <form action="?codigo=<?php echo $codigoGato ?>&editar=<?php echo $codigoGato ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group" style="margin-top: -45px;">
@@ -96,13 +100,13 @@ if(isset($_GET['codigo'])){
 
               </div>
               <div class="form-group">
-                <label class="col-form-label">Descrição Fofinha do Gato:</label>
+                <label class="col-form-label">Descrição Fofinha do Gato:<spam style="color: #7e74ff; font-size:22px;margin-left:5px;"><b> * </b></spam></label>
                 <div class="input-group">
                   <input type="text" id="descricao" name="descricao" value="<?php echo $resultadoDadosGato['GAT_DESCRICAO']; ?>" placeholder="Ximbica é um gato muito fofinho, carinhoso, sempre me entende. Eu amo ele <3" class="form-control">
                 </div>
               </div>
               <div class="form-group">          
-              <label class="col-form-label">Foto do Gato:</label>
+              <label class="col-form-label">Foto do Gato:<spam style="color: #7e74ff; font-size:22px;margin-left:5px;"><b> * </b></spam></label>
                 <div class="input-group">
                     <div class="custom-file">
                       <input type="file" class="custom-file-input" id="arquivo" name="arquivo">

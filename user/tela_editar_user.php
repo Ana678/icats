@@ -13,28 +13,32 @@ if(isset($_GET['editar'])){
   $codEditar= $_GET['editar'];
   
   if(isset($_POST['nome'])) {
-     
-    $nome= $_POST['nome'];
-    $email= $_POST['email'];
-    $telefone=$_POST['telefone'];
 
-    if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo foi selecionado, se não, não altera o campo USU_FOTO */
-  
-      $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
-      
-      header("Location:tela_perfil_user.php");
-  
-    }else{ 
-      $extensao=substr($_FILES['arquivo']['name'], -4);
-      $foto=md5(time()).$extensao;
-      $diretorio="../uploads/";
-      move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
-      
-      $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_FOTO = '$foto', USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
-      
-      header("Location:tela_perfil_user.php");
+    if($_POST['nome'] != "" && $_POST['email'] != "" && $_POST['telefone'] != ""){
+     
+      $nome= $_POST['nome'];
+      $email= $_POST['email'];
+      $telefone=$_POST['telefone'];
+
+      if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo foi selecionado, se não, não altera o campo USU_FOTO */
+    
+        $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
+        
+        header("Location:tela_perfil_user.php");
+    
+      }else{ 
+        $extensao=substr($_FILES['arquivo']['name'], -4);
+        $foto=md5(time()).$extensao;
+        $diretorio="../uploads/";
+        move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+        
+        $consultaUpdate = $MYSQLi->query("UPDATE TB_USUARIOS SET USU_NOME='$nome',USU_EMAIL='$email',USU_FOTO = '$foto', USU_TELEFONE='$telefone' WHERE USU_CODIGO=$codEditar;");
+        
+        header("Location:tela_perfil_user.php");
+      }
+    }else{
+      echo "<script> alert('Preencha Todos os Campos Obrigatórios'); </script>";
     }
-      
   }
 }
 /* ------------------------------------------------------------------ */  
@@ -52,7 +56,7 @@ if(isset($_GET['editar'])){
             <h4 class="header-title">Editar Perfil</h4>
             <form action="?editar=<?php echo $codigouser ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group" style="margin-top: -45px;">
-                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="../uploads/<?php echo $resultadoDadosUser['USU_FOTO']; ?>">
+                <img style="width: 100px;height:100px; border-radius: 50%; float: right; margin-bottom: 8px;" src="/icats/uploads/<?php echo $resultadoDadosUser['USU_FOTO']; ?>">
                 <div class="input-group">
                   <input type="text" id="nome" name="nome" placeholder="Bill borba gato" class="form-control" value="<?php echo $resultadoDadosUser['USU_NOME']; ?>">
                 </div>

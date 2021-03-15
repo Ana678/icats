@@ -4,29 +4,44 @@ include("../config.php");
 
 /* -------------- CÓDIGOS PARA ADICIONAR UM NOVO USUÁRIO -------------- */
 
-if(isset($_POST['nome'])) {
+if(isset($_POST['nome'])) { 
 
-    $email = $_POST['email'];
-    $senha = $_POST['password'];
-    $nome = $_POST['nome'];
-    $telefone = $_POST['telefone'];
-
-    if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo para a foto foi selecionado */
-        $foto = 'user_padrao.jpg'; /* se não, insere uma foto padrao no banco */
-        $consultaInsert = $MYSQLi->query("INSERT INTO TB_USUARIOS (USU_EMAIL,USU_SENHA,USU_NOME,USU_TELEFONE,USU_FOTO) VALUES ('$email','$senha','$nome','$telefone' ,'$foto')");
-
-        header("Location: login.php"); 
-    }else{    
-        $extensao=substr($_FILES['arquivo']['name'], -4);
-        $foto=md5(time()).$extensao;
-        $diretorio="../uploads/";
-        move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
-
-        $consultaInsert = $MYSQLi->query("INSERT INTO TB_USUARIOS (USU_EMAIL,USU_SENHA,USU_NOME,USU_TELEFONE,USU_FOTO) VALUES ('$email','$senha','$nome','$telefone' ,'$foto')");
+    if($_POST['nome'] != "" && $_POST['telefone'] != "" && $_POST['email'] != "" && $_POST['password'] != ""){
         
-        header("Location: login.php");  
-    }
-    
+        $email = $_POST['email'];
+
+        /* ----------------------------------- VERIFICAR SE UM EMAIL EXISTE NO BDD ----------------------------------- */
+        $verificarEmail = $MYSQLi->query("SELECT * FROM TB_USUARIOS WHERE USU_EMAIL = '$email'") ;
+
+        
+        if(mysqli_num_rows ($verificarEmail)>0){ #Se o retorno for maior do que zero, diz que já existe um usuario com esse email.
+            echo "<script> alert('Ja existe um usuário cadastrado com este email!'); </script>";
+        }else{
+        /* ---------------------------------------------------------------------------------------------------------- */
+            $senha = $_POST['password'];
+            $nome = $_POST['nome'];
+            $telefone = $_POST['telefone'];
+
+            if ($_FILES['arquivo']['size'] == 0){ /*verificar se algum arquivo para a foto foi selecionado */
+                $foto = 'user_padrao.jpg'; /* se não, insere uma foto padrao no banco */
+                $consultaInsert = $MYSQLi->query("INSERT INTO TB_USUARIOS (USU_EMAIL,USU_SENHA,USU_NOME,USU_TELEFONE,USU_FOTO) VALUES ('$email','$senha','$nome','$telefone' ,'$foto')");
+
+                header("Location: login.php"); 
+            }else{  
+                  
+                $extensao=substr($_FILES['arquivo']['name'], -4);
+                $foto=md5(time()).$extensao;
+                $diretorio="../uploads/";
+                move_uploaded_file($_FILES['arquivo']['tmp_name'],$diretorio.$foto);
+
+                $consultaInsert = $MYSQLi->query("INSERT INTO TB_USUARIOS (USU_EMAIL,USU_SENHA,USU_NOME,USU_TELEFONE,USU_FOTO) VALUES ('$email','$senha','$nome','$telefone' ,'$foto')");
+                
+                header("Location: login.php");  
+            }
+        }
+    }else{
+        echo "<br><div class='alert alert-danger text-center'>Por favor, certifique-se de que todos os campos estejam preenchidos corretamente!</div>";
+    }   
 }
 /* -------------------------------------------------------------------- */
 ?>
@@ -67,9 +82,9 @@ if(isset($_POST['nome'])) {
             <div class="login-box ptb--100">
                 <form method="POST" action="?" enctype="multipart/form-data">
                     <div class="login-form-head" style="background-color: white;">
-                        <img src="../assets/images/icon/img7.jpg" alt="logo" style="width: 50%;">
+                        <img src="../assets/images/icon/img7.jpg" alt="logo" style="width: 50%;"><br>
                     </div>
-                    <div class="login-form-body">
+                    <div class="login-form-body pt-0">
                         <div class="form-gp">
                             <label for="exampleInputPassword1">Nome completo</label>
                             <input type="text" id="exampleInputPassword1" name="nome">
@@ -91,7 +106,7 @@ if(isset($_POST['nome'])) {
                             <i class="ti-lock"></i>
                         </div>
                         <div class="form-go">
-                            <spam style="color:#B3B2B2;"> Foto: </spam>
+                            <spam style="color:#B3B2B2;"> Foto: </spam> <spam style="color: #7e74ff; font-size:10px;margin-left:5px;"><b> * Campo não obrigatório </b></spam>
                             <input type="file" id="arquivo" name="arquivo" placeholder="Foto user" class="form-control">
 
                         </div>
@@ -121,6 +136,5 @@ if(isset($_POST['nome'])) {
 </body>
 
 </html>
-
 
 

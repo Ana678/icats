@@ -5,7 +5,7 @@ include('config.php');
 $codigouser=$_SESSION['codigouser'];
 
 /* -------------- CONSULTA PARA PEGAR TODOS OS GATOS DO USUARIO ------------------- */
-$consultaGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
+$consultaGatos = $MYSQLi->query("SELECT *,COUNT('GAT_CODIGO') AS QUANT FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
 /* ----------------------------------------------------------------- */
 
 include("design_cabecalho_user.php"); 
@@ -31,6 +31,7 @@ include("design_cabecalho_user.php");
 							<tbody>
 									<?php while($resultadoGatos = $consultaGatos->fetch_assoc()){ 
 											/* --- Seleciona em 'TB_EST_SAUDE' o ultimo registro do estado de saúde do gato --- */
+											if($resultadoGatos['QUANT'] > 0){
 											$codGato=$resultadoGatos['GAT_CODIGO'];
 											$consultaEstadoSaude = $MYSQLi->query("SELECT *,date_format(EST_DATA,'%d.%m.%Y') AS DATA FROM TB_EST_SAUDE JOIN TB_HUMORES ON EST_HUM_CODIGO = HUM_CODIGO WHERE EST_GAT_CODIGO= $codGato ORDER BY EST_DATA DESC LIMIT 1");
 											$resultadoEstadoSaude = $consultaEstadoSaude->fetch_assoc();
@@ -62,7 +63,19 @@ include("design_cabecalho_user.php");
 												</a>
 											</td>
 										</tr>
-									<?php } ?>
+									<?php }else{ ?>
+											
+											<tr class="text-center">
+												<td></td>
+												<td></td>
+												<td class="text-center" style="padding:50px; font-size:16px">Você Não Cadastrou Nenhum Gato!<br>
+												<button type="button" class="btn btn-rounded btn-primary ml-2 mr-2 mt-4" onclick="location.href='/icats/gatos/tela_cadastro_gato.php';" >CADASTRAR O PRIMEIRO GATO</button> 
+												</td>
+												<td></td>
+												<td></td>
+												
+											</tr>
+									<?php }} ?>
 								</tbody>
 							</table>
 						</div>

@@ -6,7 +6,8 @@
 		header("location:login.php");
 		exit();
 	}else{
-		
+
+
 		/* -------------- CÓDIGOS PARA VALIDAR O LOGIN -------------- */
 		$email = mysqli_real_escape_string($MYSQLi,$_POST['email']);
 		$senha = mysqli_real_escape_string($MYSQLi,$_POST['senha']);
@@ -20,17 +21,25 @@
 		$username = $resultado['USU_NOME'];
 		$row = mysqli_num_rows($result);
 		if ($row==1) {
-			$_SESSION['username']=$username;
-			$_SESSION['codigouser']=$codigouser;
-			header("location:../tela_principal.php");
-			exit();
-			
+				
+				$_SESSION['username']=$username;
+				$_SESSION['codigouser']=$codigouser;
+
+				if(isset($_POST['checkbox'])){ /* se o usuario selecionar PERMANECER LOGADO */
+					setcookie('codSessao', $codigouser, time() + 3600);
+					setcookie('namSessao', $username, time() + 3600);
+				}
+
+				header("location:../tela_principal.php");
+				exit();
+				
 		}else{ /* retorna mensagem para a tela de login */
 			$_SESSION['nao_autenticado']=true;
 			header("location:login.php");
 			exit();
-		}		
+		}	
 
+			
 		/* ---------------------------------------------------------- */
 	}
 

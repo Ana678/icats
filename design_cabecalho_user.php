@@ -72,8 +72,8 @@
                             <li><div class="user-profile pull-right">
                                 <h4 class="user-name dropdown-toggle" data-toggle="dropdown"><?php $primeiroNome = explode(" ", $_SESSION['username']); echo current($primeiroNome); ?> <i class="fa fa-angle-down"></i></h4>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="/user/tela_perfil_user.php">Perfil</a>
-                                    <a class="dropdown-item" href="/login/logout.php">Log Out</a>
+                                    <a class="dropdown-item" href="/user/tela_perfil_user.php"><i class="ti-user"></i>&nbsp;&nbsp;&nbsp;Perfil</a>
+                                    <a class="dropdown-item" href="/login/logout.php"><i class="ti-share-alt"></i>&nbsp;&nbsp;&nbsp;Sair</a>
                                 </div>
                             </div></li>  
                         </ul>

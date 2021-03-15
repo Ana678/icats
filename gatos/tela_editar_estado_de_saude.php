@@ -15,15 +15,20 @@ if(isset($_GET['editar'])){
   $codGato = $resultadoDadosGato['GAT_CODIGO'];
 
   if(isset($_POST['nomeGato'])){ 
-	
-    $codNome  = $_POST['nomeGato'];
-    $codHumor = $_POST['humor'];
-    $peso     = $_POST['peso'];
-    $data     = $_POST['data'];
     
-    $consultaUpdate=$MYSQLi->query("UPDATE TB_EST_SAUDE SET EST_HUM_CODIGO='$codHumor',EST_GAT_CODIGO='$codNome',EST_PESO='$peso',EST_DATA='$data' WHERE EST_CODIGO=$codigoEstadoSaude;");
-    
-    header("Location:tela_perfil_gato.php?codigo=$codGato");
+    if($_POST['nomeGato'] != "" && $_POST['humor'] != "" && $_POST['peso'] != "" && $_POST['data'] != ""){
+
+      $codNome  = $_POST['nomeGato'];
+      $codHumor = $_POST['humor'];
+      $peso     = $_POST['peso'];
+      $data     = $_POST['data'];
+      
+      $consultaUpdate=$MYSQLi->query("UPDATE TB_EST_SAUDE SET EST_HUM_CODIGO='$codHumor',EST_GAT_CODIGO='$codNome',EST_PESO='$peso',EST_DATA='$data' WHERE EST_CODIGO=$codigoEstadoSaude;");
+      
+      header("Location:tela_perfil_gato.php?codigo=$codGato");
+    }else{
+      echo "<script> alert('Preencha Todos os Campos Obrigatórios'); </script>";
+    }
   }
 }
 /* ----------------------------------------------------------------- */
@@ -38,7 +43,7 @@ if(isset($_GET['editar'])){
       <div class="col-12 mt-5">
         <div class="card">
           <div class="card-body">
-            <h4 class="header-title">Editar Estado de saúde:</h4>
+            <h4 class="header-title">Editar Estado de saúde:<spam style="color: #7e74ff; font-size:14px;float:right">Todos os Campos são Obrigatórios</spam></h4>
           <form action="?editar=<?php echo $codigoEstadoSaude ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
               <div class="form-group">
                 <label class="col-form-label">Nome do gato:</label>
