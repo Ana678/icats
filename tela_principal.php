@@ -69,7 +69,7 @@ include("design_cabecalho_user.php");
 												<td></td>
 												<td></td>
 												<td class="text-center" style="padding:50px; font-size:16px">Você Não Cadastrou Nenhum Gato!<br>
-												<button type="button" class="btn btn-rounded btn-primary ml-2 mr-2 mt-4" onclick="location.href='/icats/gatos/tela_cadastro_gato.php';" >CADASTRAR O PRIMEIRO GATO</button> 
+												<button type="button" class="btn btn-rounded btn-primary ml-2 mr-2 mt-4" onclick="location.href='gatos/tela_cadastro_gato.php';" >CADASTRAR O PRIMEIRO GATO</button> 
 												</td>
 												<td></td>
 												<td></td>
