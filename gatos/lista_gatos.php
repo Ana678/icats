@@ -22,7 +22,7 @@ include("../design_cabecalho_user.php");
 				<div class="card card-bordered" style="border-radius:40px;">
 
 					<div class="card-body">
-						<h3><img class="imgcard-img-top img-fluid" style="width: 50px; height: 50px;margin:10px;border-radius:100%" src="/icats/uploads/<?php echo $resultado['GAT_FOTO']; ?>" alt="imagem de perfil do">
+						<h3><img class="imgcard-img-top img-fluid" style="width: 50px; height: 50px;margin:10px;border-radius:100%" src="/uploads/<?php echo $resultado['GAT_FOTO']; ?>" alt="imagem de perfil do">
 						<?php echo $resultado['GAT_NOME']; ?></h3>
 						<h6><?php echo $resultado['GAT_DESCRICAO']; ?></h6><br>
 						<div class="row align-center justify-content-center">
