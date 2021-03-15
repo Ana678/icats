@@ -8,7 +8,7 @@ if (isset($_COOKIE['codSessao'])){
     $_SESSION['codigouser']= $_COOKIE['codSessao'];
     $_SESSION['username']= $_COOKIE['namSessao'];
     
-    header("Location: /icats/tela_principal.php");
+    header("Location: /tela_principal.php");
 }
 /*--------------------------------------------------------------------------*/
 ?>
