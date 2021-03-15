@@ -5,7 +5,7 @@ include('config.php');
 $codigouser=$_SESSION['codigouser'];
 
 /* -------------- CONSULTA PARA PEGAR TODOS OS GATOS DO USUARIO ------------------- */
-$consultaGatos = $MYSQLi->query("SELECT *,COUNT('GAT_CODIGO') AS QUANT FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
+$consultaGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
 /* ----------------------------------------------------------------- */
 
 include("design_cabecalho_user.php"); 
@@ -29,9 +29,9 @@ include("design_cabecalho_user.php");
 								</tr>
 							</thead>
 							<tbody>
-									<?php while($resultadoGatos = $consultaGatos->fetch_assoc()){ 
+								<?php if(mysqli_num_rows ($consultaGatos)>0){ // se tiver algum gato cadastrado ....
+											while($resultadoGatos = $consultaGatos->fetch_assoc()){ 
 											/* --- Seleciona em 'TB_EST_SAUDE' o ultimo registro do estado de saúde do gato --- */
-											if($resultadoGatos['QUANT'] > 0){
 											$codGato=$resultadoGatos['GAT_CODIGO'];
 											$consultaEstadoSaude = $MYSQLi->query("SELECT *,date_format(EST_DATA,'%d.%m.%Y') AS DATA FROM TB_EST_SAUDE JOIN TB_HUMORES ON EST_HUM_CODIGO = HUM_CODIGO WHERE EST_GAT_CODIGO= $codGato ORDER BY EST_DATA DESC LIMIT 1");
 											$resultadoEstadoSaude = $consultaEstadoSaude->fetch_assoc();
@@ -63,7 +63,7 @@ include("design_cabecalho_user.php");
 												</a>
 											</td>
 										</tr>
-									<?php }else{ ?>
+									<?php }}else{ ?>
 											
 											<tr class="text-center">
 												<td></td>
@@ -75,7 +75,7 @@ include("design_cabecalho_user.php");
 												<td></td>
 												
 											</tr>
-									<?php }} ?>
+									<?php } ?>
 								</tbody>
 							</table>
 						</div>

@@ -4,8 +4,7 @@ include("../config.php");
 
 /* -------------- CONSULTA NO BANCO OS DADOS DOS GATOS DO USUÁRIO -------------- */
 $codigouser=$_SESSION['codigouser'];
-$consultaGatos = $MYSQLi->query("SELECT *,COUNT('GAT_CODIGO') AS QUANT FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
-
+$consultaGatos = $MYSQLi->query("SELECT * FROM TB_GATOS WHERE GAT_USU_CODIGO = $codigouser");
 /* ----------------------------------------------------------------------------- */
 
 include("../design_cabecalho_user.php");
@@ -15,8 +14,10 @@ include("../design_cabecalho_user.php");
 
 <div class="card-area">
 	<div class="row">
-		<?php while($resultado = $consultaGatos->fetch_assoc()){ 
-					if($resultado['QUANT'] > 0){
+		<?php if(mysqli_num_rows ($consultaGatos)>0){ // se tiver algum gato cadastrado ....
+
+				while($resultado = $consultaGatos->fetch_assoc()){ 
+					
 			?>
 			<div class="col-lg-4 col-md-6 mt-5">
 				<div class="card card-bordered" style="border-radius:40px;">
@@ -33,7 +34,7 @@ include("../design_cabecalho_user.php");
 					</div>
 				</div>
 			</div>
-		<?php }else{ ?>
+		<?php }}else{ ?>
 			<div class="col-lg-12 mt-5">
 				<div class="card card-bordered" style="border-radius:40px;">
 
@@ -44,7 +45,7 @@ include("../design_cabecalho_user.php");
 					</div>
 				</div>
 			</div>
-		<?php }} ?>
+		<?php } ?>
 	</div>
 </div>
 <?php include("../design_rodape.php"); ?>
